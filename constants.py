@@ -3,6 +3,10 @@ extended_numerals = {
     14: 'e', 15: 'f'
 }
 
+inv_extended_numerals = {
+    value: key for key, value in extended_numerals.items()
+}
+
 name_binary = ('bin', 'binary')
 name_octal = ('oct', 'octal')
 name_decimal = ('dec', 'decimal', 'denary')
