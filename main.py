@@ -1,47 +1,53 @@
-"""A program to convert between bases and number
-representation systems.
+"""A program which manually converts between
+bases and number representation systems.
 
-Task 1.4.1f Kevin Gao
+Task 1.4.1.f Kevin Gao
 """
 
 from constants import *
-from digit import DigitCollection, t_DigitCollection
-
+from digit import DigitCollection
 
 def valid_base(user_input: str):
     lowercase_input = user_input.lower()
     
     if lowercase_input in name_binary:
-        return 2
+        return BINARY, BINARY
     elif lowercase_input in name_octal:
-        return 8
+        return OCTAL, OCTAL
     elif lowercase_input in name_decimal:
-        return 10
+        return DECIMAL, DECIMAL
     elif lowercase_input in name_hexadecimal:
-        return 16
+        return HEXADECIMAL, HEXADECIMAL
+    elif lowercase_input in name_bcd:
+        return DECIMAL, HEXADECIMAL
     
     raise ValueError('Invalid base: base not found. Accepted bases include \
-binary, octal, decimal and hexadecimal.')
+binary, octal, decimal and hexadecimal (and bcd).')
 
 
 if __name__ == '__main__':
     print("  * Work in progress: user interface is not currently proofed.\n")
 
     digits = []
-    base = DECIMAL
+    polarity = 0
+    base = wrap_point = DECIMAL
+
     request_input = True
     while request_input:
-        working_value = input("digit values (comma separated, lower than base): ")
+        working_value = input("digit values (comma separated): ")
+        working_polarity = input("is positive: ")
         working_base = input("base (name ie. decimal): ")
 
         try:
             digits = list(map(int, working_value.split(",")))
-            base = valid_base(working_base)
-            break
-        except ValueError:
-            print("Invalid values entered.")
+            polarity = 1 if "n" in working_polarity.lower() else 0
+            base, wrap_point = valid_base(working_base)
+            request_input = False
 
-    example = DigitCollection(digits, base)
+        except ValueError as e:
+            print(f"Invalid values entered.\n{e}")
+
+    example = DigitCollection(digits, polarity, base, wrap_point)
     print(f'Str value  {example}')
     print(f'Numerals   {example.numeral()}')
     print(f'Int value  {example.value()}')
@@ -55,12 +61,12 @@ if __name__ == '__main__':
 
         try:
             value = int(working_value)
-            base = valid_base(working_base)
-            break
-        except ValueError:
-            print("Invalid values entered.")
+            base, wrap_point = valid_base(working_base)
+            request_input = False
+        except ValueError as e:
+            print(f"Invalid values entered:\n{e}")
 
-    example = t_DigitCollection(value, base)
+    example = DigitCollection.init_from_value(value, base, wrap_point)
     print(f'Str value  {example}')
     print(f'Numerals   {example.numeral()}')
     print(f'Int value  {example.value()}')
