@@ -11,6 +11,7 @@ name_binary = ('bin', 'binary')
 name_octal = ('oct', 'octal')
 name_decimal = ('dec', 'decimal', 'denary')
 name_hexadecimal = ('hex', 'hexadecimal')
+name_bcd = ('bcd', 'binary coded decimal', 'packed')
 
 BINARY = 2
 OCTAL = 8
