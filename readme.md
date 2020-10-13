@@ -1,52 +1,34 @@
-# 1.4.1.f Conversion Calculator
+# Conversion Calculator
+Task 1.4.1.f - CPython 3.7 or 3.8
 
 ## Specification
-Design and program a calculator which allows the user to,  
+Design and program a calculator which allows the user to, 
 
-Convert from a binary number to a denary number 
-Convert from a denary number to a binary number 
-Convert from a negative denary number to a negative binary number 
-Convert from a negative binary number to a negative denary number 
+1. 1. Convert from a binary number to a denary number 
+   2. Convert from a denary number to a binary number 
+   3. Convert from a negative denary number to a negative binary number 
+   4. Convert from a negative binary number to a negative denary number 
 
-### Task 2 - F 
+2. Convert between Denary, Binary and Hexadecimal. 
+3. The user can either choose to represent the negative binary number as either sign magnitude or two's complement. 
+4. Allow the answer to be displayed in one's complement. 
+5. Convert between, Denary, Binary, Hexadecimal, Octal and BCD. 
+6. Modify so values can be added and subtracted in your program. Show Denary, Binary and Hexadecimal addition and subtraction. 
+7. Interact with the program using a graphical user interface - in particular, this project will utilise Flask. 
+8. Print out the maths for each conversion in a suitable format for the user to understand the calculation. 
 
-Add the ability to add hexadecimal into the program. Conversions between Denary, Binary and Hexadecimal needed.  Note only convert positive numbers into hexadecimal. 
-
-### Task 3 - E 
-
-The user can either choose to represent the negative binary number as either sign magnitude or twos complement. 
-
-### Task 4 - D 
-
-Allow the answer to be displayed in one's complement to the program. 
-
-### Task 5 - C 
-
-Conversions between, Denary, Binary, Hexadecimal, Octal and BCD 
-
-### Task 5 - B 
-
-Modify so values can be added and subtracted in your program. Show Denary, Binary and Hexadecimal addition and subtraction. 
-
-### Task 6 - A 
-
-Make it graphical. 
-
-### Task 7 - A* 
-
-Print out the maths for each conversion in a suitable format for the user to understand the calculation 
-
-### Extension 
-
-Add negative Hexadecimal, research this, but not on the course. 
-
-
-## Digit()
+## Data
 
 This program defines DigitCollection(), wrapping an array of integer digits and providing conversion methods.
 
-Negative numeric values are specified with the polarity property (1 for negative, 0 for positive). This is equivalent to "sign bit" of the number.
+Negative numeric values are specified with the polarity property (1 for negative, 0 for positive).
+This is equivalent to the "sign bit" of a sign-and-magnitude binary number.
+
+Binary coded decimal is represented using `base=DECIMAL, wrap_point=HEXADECIMAL` (not `BINARY`).
+Use the `.pad_to_bytes()` method to return the number as binary.
+
+Perform addition for place-value numbers using `DigitCollection() + DigitCollection() -> DigitCollection()`.
 
 ## Program Use
 
-Run main() to start the program. Inputs are a work in progress.
+The program can only currently be run using an interactive Python console (ie. the IDLE shell). main.py is currently in a deprecated state.
