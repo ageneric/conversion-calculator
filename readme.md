@@ -31,4 +31,7 @@ Perform addition for place-value numbers using `DigitCollection() + DigitCollect
 
 ## Program Use
 
-The program can only currently be run using an interactive Python console (ie. the IDLE shell). main.py is currently in a deprecated state.
+The program can be run in a limited, text-based mode by running main.py.
+There is also a Flask web app included. Use Flask with FLASK_APP = run_app.py. The calculation is not yet returned.
+
+Alternatively, running digit.py in an interactive Python console (ie. the IDLE shell) will give access to all core functionality.

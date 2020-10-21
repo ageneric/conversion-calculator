@@ -1,5 +1,5 @@
-"""A program which manually converts between
-bases and number representation systems.
+"""Demonstrates conversions between bases
+and number representation systems.
 
 Task 1.4.1.f Kevin Gao
 """

@@ -51,7 +51,7 @@ class BaseDigit:
     def __init__(self, digits, base=10, wrap_point=None):
         self.base = base
         # wrap_point: the digit wrap-around point used:
-        # binary coded decimal / BCD would use (base=10, wrap_point=16).
+        # packed binary coded decimal / BCD would use (base=10, wrap_point=16).
         self.wrap_point = base if wrap_point is None else wrap_point
 
         self.digits = sanitise_digits(digits, self.base, self.wrap_point)
@@ -291,7 +291,7 @@ def test():
     assert x.value() == -negative_x_value
 
     equal_to_x = DigitCollection.init_from_value(-negative_x_value, x.base, x.wrap_point)
-    assert equal_to_x.__dict__ == x.__dict__  # Check they have identical attributes.
+    assert equal_to_x.__dict__ == x.__dict__  # Check for identical attributes and attribute count.
 
     no_overflow = DigitCollection((0, 1, 1, 1, 1, 1, 1, 1), base=BINARY)
     assert (no_overflow + no_overflow + no_overflow).value() == no_overflow.value() * 3

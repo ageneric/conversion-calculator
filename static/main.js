@@ -6,8 +6,11 @@ class AddStep extends React.Component {
     this.state = { items: [], numericBase: 'dec', numericValue: '', calcType: '_bin' };
 
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.addCalc = this.addCalc.bind(this);
     this.changeBase = this.changeBase.bind(this);
     this.changeValue = this.changeValue.bind(this);
+    this.changeCalc = this.changeCalc.bind(this);
+    this.clear = this.clear.bind(this);
   }
 
 
@@ -16,7 +19,7 @@ class AddStep extends React.Component {
       "div",
       null,
       React.createElement(
-        "form",
+        "div",
         { "class": "form" },
         React.createElement(
           "div",
@@ -80,6 +83,63 @@ class AddStep extends React.Component {
           )
         )
       ),
+      React.createElement(
+        "div",
+        { "class": "form" },
+        React.createElement(
+          "div",
+          { "class": "flex-item" },
+          React.createElement(
+            "label",
+            { "for": "data-type" },
+            "Calculations"
+          ),
+          React.createElement(
+            "select",
+            { name: "data-type",
+              onChange: this.changeCalc,
+              value: this.state.calcType },
+            React.createElement(
+              "option",
+              { value: "_bin", selected: true },
+              "To Binary"
+            ),
+            React.createElement(
+              "option",
+              { value: "_dec" },
+              "To Decimal"
+            ),
+            React.createElement(
+              "option",
+              { value: "_hex" },
+              "To Hexadecimal"
+            ),
+            React.createElement(
+              "option",
+              { value: "add" },
+              "Add"
+            )
+          )
+        ),
+        React.createElement(
+          "div",
+          { "class": "flex-item" },
+          React.createElement(
+            "button",
+            { type: "add-data", onClick: this.addCalc },
+            "Add Step"
+          )
+        ),
+        React.createElement(
+          "div",
+          { "class": "flex-item" },
+          React.createElement(
+            "button",
+            { onClick: this.clear },
+            "Clear All"
+          )
+        )
+      ),
       React.createElement(StepList, { items: this.state.items })
     );
   }
@@ -95,6 +155,28 @@ class AddStep extends React.Component {
 
   changeValue(e) {
     this.setState({ numericValue: e.target.value });
+  }
+  
+  changeCalc(e) {
+    this.setState({ calcType: e.target.value });
+  }
+  
+  addCalc(e) {
+    e.preventDefault();
+    if (this.state.calcType.length === 0) {
+      return;
+    }
+    const newItem = {
+      type: "calculation",
+      calc: this.state.calcType,
+      string: this.state.calcType,
+      id: Date.now()
+    };
+    items = this.state.items.concat(newItem);
+    
+    this.setState(state => ({
+      items: items
+    }));
   }
 
   handleSubmit(e) {
