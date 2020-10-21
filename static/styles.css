@@ -1,0 +1,109 @@
+:root {
+  font-size: 16px;
+  font-size: calc(10px + 0.6vmax);
+
+  --bar: #333540;
+  --background: #e0dfd8;
+  --theme-primary: #6b7783;
+  --text-main: #28292d;
+  --text-light: #ffffff;
+}
+
+html, body {
+  padding: 0px;
+  margin: 0px;
+}
+
+body {
+  font-family: Segoe UI, sans-serif;
+  color: #282a2d;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--background);
+}
+
+body::-webkit-scrollbar {
+  width: 0.5em;
+  height: 0.5em;
+}
+
+.text {
+  padding-left: 2em;
+  padding-right: 2em;
+  margin-right: auto;
+  margin-left: auto;
+  width: 70%;
+  min-width: 28em;
+}
+
+p {
+  padding-bottom: 1em;
+}
+
+h2 {
+  font-weight: lighter;
+  color: var(--theme-primary);
+}
+
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: 100%;
+  min-width: 100px;
+  display: block;
+  margin-top: 0.2em;
+  padding: 1px 2px;
+}
+
+input, select {
+  width: 80%;
+}
+
+.form {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  padding-bottom: 1em;
+}
+
+.highlight {
+  color: var(--theme-primary);
+}
+
+.bar {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: -moz-box;
+  display: flex;
+  height: 3em;
+  padding: 0 1em;
+  color: var(--text-light);
+  background-color: #545556;
+  align-items: center;
+}
+
+.bar-item {
+  padding-left: 1em;
+}
+
+.flex-item {
+  flex: 1;
+  align-self: flex-end;
+}
+
+#top {
+  user-select: none;
+  position: relative;
+  top: 0;
+  z-index: 1;
+}
+
+@media only screen and (max-width: 30em) {
+  .text {
+    margin-right: 0px;
+    margin-left: 0px;
+    width: fit-content;
+    min-width: 2em;
+  }
+}
