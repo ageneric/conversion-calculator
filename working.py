@@ -3,11 +3,11 @@ from constants import SAVE_WORKING, log_directory
 
 working = []
 current_step = []
-synchronise_step_count = 0
 
 def clear():
-    with open(log_directory, 'w'):
-        pass
+    pass
+    # with open(log_directory, 'w'):
+    #     pass
 
 def log_method(message, *args, priority_level=-1):
     if not SAVE_WORKING:
@@ -38,8 +38,8 @@ def log_method(message, *args, priority_level=-1):
         displayed = f'| {content}'
 
     print(displayed)
-    with open(log_directory, 'a') as log_file:
-        log_file.write(displayed + '\n')
+    # with open(log_directory, 'a') as log_file:
+    #     log_file.write(displayed + '\n')
 
 
 clear()

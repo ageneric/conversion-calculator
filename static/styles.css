@@ -2,9 +2,9 @@
   font-size: 16px;
   font-size: calc(10px + 0.6vmax);
 
-  --bar: #333540;
+  --bar: #4b4c50;
   --background: #e0dfd8;
-  --theme-primary: #6b7783;
+  --theme-primary: #6b7984;
   --text-main: #28292d;
   --text-light: #ffffff;
 }
@@ -23,11 +23,6 @@ body {
   background-color: var(--background);
 }
 
-body::-webkit-scrollbar {
-  width: 0.5em;
-  height: 0.5em;
-}
-
 .text {
   padding-left: 2em;
   padding-right: 2em;
@@ -38,7 +33,7 @@ body::-webkit-scrollbar {
 }
 
 p {
-  padding-bottom: 1em;
+  padding-bottom: 0.6em;
 }
 
 h2 {
@@ -59,16 +54,34 @@ input, select {
   width: 80%;
 }
 
+input, button {
+  padding: 1px 3px;
+}
+
+#clear {
+  float: right;
+  margin-top: 0.8em;
+  margin-left: 1em;
+  margin-right: 0.6em;
+}
+
 .form {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: -moz-box;
   display: flex;
-  padding-bottom: 1em;
+  padding: 0.6em 0.6em;
+  margin-bottom: 0.6em;
+  background-color: #ede7e8;
+  border: 1px solid var(--text-light);
 }
 
 .highlight {
   color: var(--theme-primary);
+}
+
+.note {
+  font-size: 80%;
 }
 
 .bar {
@@ -78,8 +91,9 @@ input, select {
   display: flex;
   height: 3em;
   padding: 0 1em;
+  margin-bottom: 0.6em;
   color: var(--text-light);
-  background-color: #545556;
+  background-color: var(--bar);
   align-items: center;
 }
 

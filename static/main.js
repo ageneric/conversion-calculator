@@ -1,147 +1,48 @@
 var items = [];
 
+function submit() {
+  if (items.length == 0) {
+    return;
+  }
+  console.log(items);
+  
+  var xhr = new XMLHttpRequest();
+  
+  xhr.open('POST', '/result');
+  xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
+  xhr.onload = function() {
+    if (xhr.status === 200 && xhr.responseText !== items) {
+      alert('Response updated: ' + xhr.responseText);
+    }
+    else if (xhr.status !== 200) {
+      alert('Request failed. Returned status of ' + xhr.status);
+    }
+  };
+  
+  xhr.send(JSON.stringify(items));
+}
+
 class AddStep extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { items: [], numericBase: 'dec', numericValue: '', calcType: '_bin' };
+    this.state = { items: [], base: '10', numeric: '', calcType: '2' };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.addCalc = this.addCalc.bind(this);
+    this.submitNumber = this.submitNumber.bind(this);
+    this.submitCalc = this.submitCalc.bind(this);
     this.changeBase = this.changeBase.bind(this);
-    this.changeValue = this.changeValue.bind(this);
-    this.changeCalc = this.changeCalc.bind(this);
+    this.changeNumeric = this.changeNumeric.bind(this);
+    this.changeCalcType = this.changeCalcType.bind(this);
     this.clear = this.clear.bind(this);
   }
 
-
   render() {
-    return React.createElement(
-      "div",
-      null,
-      React.createElement(
-        "div",
-        { "class": "form" },
-        React.createElement(
-          "div",
-          { "class": "flex-item" },
-          React.createElement(
-            "label",
-            { "for": "data-type" },
-            "Data Type"
-          ),
-          React.createElement(
-            "select",
-            { name: "data-type",
-              onChange: this.changeBase,
-              value: this.state.numericBase },
-            React.createElement(
-              "option",
-              { value: "bin" },
-              "Binary"
-            ),
-            React.createElement(
-              "option",
-              { value: "oct" },
-              "Octal"
-            ),
-            React.createElement(
-              "option",
-              { value: "dec", selected: true },
-              "Decimal"
-            ),
-            React.createElement(
-              "option",
-              { value: "hex" },
-              "Hexadecimal"
-            ),
-            React.createElement(
-              "option",
-              { value: "bcd" },
-              "BCD"
-            )
-          )
-        ),
-        React.createElement(
-          "div",
-          { "class": "flex-item" },
-          React.createElement(
-            "label",
-            { "for": "data-value" },
-            "Base 10 Value"
-          ),
-          React.createElement("input", { name: "data-value",
-            onChange: this.changeValue,
-            value: this.state.numericValue })
-        ),
-        React.createElement(
-          "div",
-          { "class": "flex-item" },
-          React.createElement(
-            "button",
-            { type: "add-data", onClick: this.handleSubmit },
-            "Add Number"
-          )
-        )
-      ),
-      React.createElement(
-        "div",
-        { "class": "form" },
-        React.createElement(
-          "div",
-          { "class": "flex-item" },
-          React.createElement(
-            "label",
-            { "for": "data-type" },
-            "Calculations"
-          ),
-          React.createElement(
-            "select",
-            { name: "data-type",
-              onChange: this.changeCalc,
-              value: this.state.calcType },
-            React.createElement(
-              "option",
-              { value: "_bin", selected: true },
-              "To Binary"
-            ),
-            React.createElement(
-              "option",
-              { value: "_dec" },
-              "To Decimal"
-            ),
-            React.createElement(
-              "option",
-              { value: "_hex" },
-              "To Hexadecimal"
-            ),
-            React.createElement(
-              "option",
-              { value: "add" },
-              "Add"
-            )
-          )
-        ),
-        React.createElement(
-          "div",
-          { "class": "flex-item" },
-          React.createElement(
-            "button",
-            { type: "add-data", onClick: this.addCalc },
-            "Add Step"
-          )
-        ),
-        React.createElement(
-          "div",
-          { "class": "flex-item" },
-          React.createElement(
-            "button",
-            { onClick: this.clear },
-            "Clear All"
-          )
-        )
-      ),
-      React.createElement(StepList, { items: this.state.items })
-    );
+    // Generated code, read the equivalent in /jsx.
+    return React.createElement("div",null,
+      React.createElement("div",{"class":"form"},React.createElement("div",{"class":"flex-item"},React.createElement("label",{"for":"numeric-base"},"Base"),React.createElement("select",{name:"numeric-base",onChange:this.changeBase,value:this.state.base},React.createElement("option",{value:"2"},"Binary"),React.createElement("option",{value:"8"},"Octal"),React.createElement("option",{value:"10",selected:true},"Decimal"),React.createElement("option",{value:"16"},"Hexadecimal"),React.createElement("option",{value:"BCD"},"BCD"))),React.createElement("div",{"class":"flex-item"},React.createElement("label",{"for":"numeric-digits"},"Digits ",React.createElement("span",{"class":"note"},"(- for negative)")),React.createElement("input",{type:"text",name:"numeric-digits",onChange:this.changeNumeric,value:this.state.numeric})),React.createElement("div",{"class":"flex-item"},React.createElement("button",{onClick:this.submitNumber},"Add Number"))),
+      React.createElement("div",{"class":"form"},React.createElement("div",{"class":"flex-item"},React.createElement("label",{"for":"calculation"},"Calculations"),React.createElement("select",{name:"calculation",onChange:this.changeCalcType,value:this.state.calcType},React.createElement("option",{value:"2",selected:true},"To Binary"),React.createElement("option",{value:"8"},"To Octal"),React.createElement("option",{value:"10"},"To Decimal"),React.createElement("option",{value:"16"},"To Hexadecimal"),React.createElement("option",{value:"BCD"},"To BCD"),React.createElement("option",{value:"add"},"Add Next"),React.createElement("option",{value:"numerals"},"Display Numerals"),React.createElement("option",{value:"value"},"Display Base 10 Value"),React.createElement("option",{value:"pad_to_bytes"},"Display as Bytes"),React.createElement("option",{value:"sign_and_magnitude"},"Display Sign and Mag."),React.createElement("option",{value:"one_complement"},"Display One's Complement"),React.createElement("option",{value:"two_complement"},"Display Two's Complement"))),React.createElement("div",{"class":"flex-item"},React.createElement("button",{onClick:this.submitCalc},"Add Calculation"))),
+      React.createElement("button",{id:"clear",onClick:this.clear},"Clear All Steps"),
+      React.createElement("p",null,"Each step here will be evaluated from top to bottom. The final value will also be returned."),
+      React.createElement(StepList,{items:this.state.items}));
   }
 
   clear(e) {
@@ -150,45 +51,57 @@ class AddStep extends React.Component {
   }
 
   changeBase(e) {
-    this.setState({ numericBase: e.target.value });
+    this.setState({ base: e.target.value });
   }
 
-  changeValue(e) {
-    this.setState({ numericValue: e.target.value });
+  changeNumeric(e) {
+    this.setState({ numeric: e.target.value });
   }
   
-  changeCalc(e) {
+  changeCalcType(e) {
     this.setState({ calcType: e.target.value });
   }
   
-  addCalc(e) {
+  submitCalc(e) {
     e.preventDefault();
     if (this.state.calcType.length === 0) {
       return;
     }
-    const newItem = {
-      type: "calculation",
-      calc: this.state.calcType,
-      string: this.state.calcType,
-      id: Date.now()
-    };
-    items = this.state.items.concat(newItem);
-    
+
+    if (this.state.calcType === "add") {
+      const newItem = {
+        type: "calculation",
+        calc: this.state.calcType,
+        string: "Add next number",
+        id: Date.now()
+      };
+      items = this.state.items.concat(newItem);
+    }
+    else {
+      const newItem = {
+        type: "calculation",
+        calc: this.state.calcType,
+        string: "Calculation -> " + this.state.calcType,
+        id: Date.now()
+      };
+      items = this.state.items.concat(newItem);
+    }
+
     this.setState(state => ({
       items: items
     }));
   }
 
-  handleSubmit(e) {
+  submitNumber(e) {
     e.preventDefault();    
-    if (this.state.numericValue.length === 0) {
+    if (this.state.numeric.length === 0) {
       return;
     }
     const newItem = {
       type: "value",
-      numeric: this.state.numericValue,
-      base: this.state.numericBase,
-      string: this.state.numericValue + " " + this.state.numericBase,
+      numeric: this.state.numeric,
+      base: this.state.base,
+      string: this.state.numeric + " (base " + this.state.base + ")",
       id: Date.now()
     };
     items = this.state.items.concat(newItem);

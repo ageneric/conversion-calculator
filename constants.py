@@ -17,6 +17,14 @@ name_decimal = ('10', 'dec', 'decimal', 'denary')
 name_hexadecimal = ('16', 'hex', 'hexadecimal')
 name_bcd = ('bcd', 'binary coded decimal', 'packed')
 
+conversions = ('2', '8', '10', '16')
+functions = ('add', 'numerals', 'value', 'pad_to_bytes',
+             'one_complement', 'two_complement', 'sign_and_magnitude')
+
+CONVERSION = 0
+FUNCTION = 1
+NEW_NUMBER = 2
+
 BINARY = 2
 OCTAL = 8
 DECIMAL = 10
