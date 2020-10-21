@@ -6,9 +6,10 @@ Task 1.4.1.f Kevin Gao
 
 from constants import *
 from digit import DigitCollection
+import working
 
 
-def parse_method(json_items):
+def parse_request(json_items):
     """Get a JSON-style structure: an array of Dict (str -> str)
     like {'type': 'value', ...} representing each step requested.
     Attempt to parse instructions from it."""
@@ -19,9 +20,9 @@ def parse_method(json_items):
             if step['type'] == 'value':
                 new_base, new_wrap_point = valid_base(step['base'])
                 new_digits, new_polarity = parse_numeric(step['numeric'])
+
                 new = DigitCollection(new_digits, new_polarity, new_base, new_wrap_point)
                 raw_method.append(new)
-
             elif step['type'] == 'calculation':
                 calc = step['calc'].lower()
                 if calc in conversions:
@@ -107,7 +108,13 @@ def digit_method_value(memory, f_name):
     elif f_name == functions[6]:
         return memory.sign_and_magnitude()
 
-def run_method(steps):
+def evaluate_steps(steps):
+    """Runs through a list of steps sanitised
+    in parse_request() and attempts to execute
+    the request's instructions & return working."""
+    working.clear()
+    working.working = []
+
     if step_type(steps[0]) != NEW_NUMBER:
         raise ValueError('The list of steps must start with a number.')
 
@@ -115,34 +122,49 @@ def run_method(steps):
     operation = None
     representations = []
 
-    for i, current_step in enumerate(steps):
-        if step_type(current_step) == NEW_NUMBER:
+    for current_step in steps:
+        working.current_step = []
+
+        _step_type = step_type(current_step)
+        if _step_type == NEW_NUMBER:
             if operation is None:
+                working.log_method('Overwritten stored number', current_step, priority_level=2)
                 memory = current_step
             elif operation == functions[0]:
+                working.log_method('Addition', memory, current_step, priority_level=2)
                 memory = memory + current_step
                 operation = None
             else:
                 raise ValueError(f'Unknown operation during steps execution {operation}.')
 
-        elif step_type(current_step) == CONVERSION:
-            memory = memory.convert_base(current_step[1][0], current_step[1][1])
+        elif _step_type == CONVERSION:
+            conversion_types = current_step[1]
+            working.log_method('Conversion', conversion_types, priority_level=2)
+            memory = memory.convert_base(conversion_types[0], conversion_types[1])
 
-        elif step_type(current_step) == FUNCTION:
+        elif _step_type == FUNCTION:
             f_name = current_step[1]
             if f_name == functions[0]:
+                working.log_method('Add the next value supplied', priority_level=2)
                 operation = f_name
             else:
+                working.log_method('Display', f_name, priority_level=2)
                 x = digit_method_value(f_name)
                 representations.append(x)
+                working.log_method('Representation: Result', x, priority_level=1)
 
-    # Add on the final value.
+        # If any working has been added to the log during the step.
+        if working.current_step:
+            working.working.append(working.current_step)
+
     if step_type(memory) == NEW_NUMBER:
-        representations.append(str(memory))
+        answer = str(memory)
     else:
         raise ValueError('Corrupted memory during steps execution.')
 
-    return representations
+    method = '<div>' + '</div><div>'.join(working.working) + '</div>'
+    return answer, method
+
 
 if __name__ == '__main__':
     print("""* It is preferred to use the Flask web app included, by running
@@ -152,6 +174,7 @@ Run digit.py in an IDE to test it. Each DigitCollection is an object, for exampl
 >>> Digit("15", base=DECIMAL)
 """)
 
+    working.clear()
     digits = []
     polarity = 0
     base = wrap_point = DECIMAL

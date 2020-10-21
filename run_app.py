@@ -15,13 +15,19 @@ def calculation():
         json_items = request.get_json()
 
         try:
-            steps = parse_method(json_items)
-            result = run_method(steps)
-        except Exception as generic_error:  # Generic error catcher.
+            steps = parse_request(json_items)
+            answer, method = evaluate_steps(steps)
+        except Exception as generic_error:
             print(generic_error)
-            result = 'Error: ' + str(generic_error)
+            answer, method = 'null', 'Error: ' + str(generic_error)
 
-        return f'{result}', 200
+        # Escape all strings. Cannot use single quotes, as JSON
+        # will only accept double quotes / escaped double quotes.
+        # TODO: switch to json module (None -> "null", escape quotes).
+        method = str(method).replace('"', r'\"').replace('\'', r'"')
+        result = f'"answer": "{answer}", "method": "{method}"'
+        result = '{' + result + '}'  # Format for JSON parsing.
+        return result, 200
 
     return '', 200
 

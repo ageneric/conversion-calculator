@@ -3,8 +3,10 @@
   font-size: calc(10px + 0.6vmax);
 
   --bar: #4b4c50;
-  --background: #e0dfd8;
   --theme-primary: #6b7984;
+  --theme-secondary: #cdc5d9;
+  --background: #e0dfd8;
+
   --text-main: #28292d;
   --text-light: #ffffff;
 }
@@ -58,11 +60,17 @@ input, button {
   padding: 1px 3px;
 }
 
+ol, ul {
+  border-left: 5px solid #cdc5d9;
+  background-color: #f1f1f1;
+  border-radius: 3px;
+}
+
 #clear {
-  float: right;
+  float: left;
   margin-top: 0.8em;
-  margin-left: 1em;
-  margin-right: 0.6em;
+  margin-left: 0.6em;
+  margin-right: 1em;
 }
 
 .form {
@@ -72,8 +80,8 @@ input, button {
   display: flex;
   padding: 0.6em 0.6em;
   margin-bottom: 0.6em;
-  background-color: #ede7e8;
-  border: 1px solid var(--text-light);
+  background-color: #c8c7c0;
+  border-radius: 3px;
 }
 
 .highlight {
@@ -104,6 +112,24 @@ input, button {
 .flex-item {
   flex: 1;
   align-self: flex-end;
+}
+
+.flex-item-double {
+  flex: 2;
+}
+
+.working {
+  padding-left: 3em;
+}
+
+.working-double {
+  padding-left: 1.5em;
+  list-style: circle;
+}
+
+.working-header {
+  color: var(--theme-primary);
+  list-style: none;
 }
 
 #top {
