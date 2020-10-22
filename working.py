@@ -1,22 +1,24 @@
-from constants import SAVE_WORKING, LOCAL_DEBUG, log_directory
+from constants import USE_WORKING, LOG_WORKING, log_directory
+from itertools import count
 
 # Modified using global by log_method().
 # Used by main while evaluating steps.
 working = []
 current_step = []
-current_step_title = ''
+
+# Increments for unique id.
+id_counter = count(0)
 
 def clear():
-    if LOCAL_DEBUG:
+    if LOG_WORKING:
         with open(log_directory, 'w'):
             pass
 
 def log_method(message, *args, priority_level=-1):
-    if not SAVE_WORKING:
+    if not USE_WORKING:
         return
 
     global current_step
-    global current_step_title
 
     if args:
         content = f'{message}: {", ".join(map(str, args))}'
@@ -24,19 +26,23 @@ def log_method(message, *args, priority_level=-1):
         content = f'{message}.'
 
     if priority_level >= 2:
-        current_step_title = f'<h3>{content}</h3>'
-        displayed = f'[Step] {content}'
+        element = {'tag': 'h3', 'class': 'step-header'}
+        displayed = f'Step: {content}'
     elif priority_level == 1:
-        current_step.append(f'<li class="working-header">{content}</li>')
-        displayed = f'|*| {content}'
-    elif priority_level == 0:
-        current_step.append(f'<li class="working">{content}</li>')
-        displayed = f' *  {content}'
-    else:
-        current_step.append(f'<li class="working-small">{content}</li>')
+        element = {'tag': 'li', 'class': 'working-header'}
         displayed = f'| {content}'
+    elif priority_level == 0:
+        element = {'tag': 'li', 'class': 'working-legend'}
+        displayed = f'- {content}'
+    else:
+        element = {'tag': 'li', 'class': 'working'}
+        displayed = content
 
-    if LOCAL_DEBUG:
+    element['string'] = content
+    element['key'] = next(id_counter)
+    current_step.append(element)
+
+    if LOG_WORKING:
         print(displayed)
         with open(log_directory, 'a') as log_file:
             log_file.write(displayed + '\n')

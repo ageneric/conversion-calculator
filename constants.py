@@ -8,8 +8,8 @@ inv_extended_numerals = {
 }
 
 BREAK_ON_ERROR = True
-SAVE_WORKING = True  # Record the methods taken by the program.
-LOCAL_DEBUG = False  # Write the working log to a file & print to console.
+USE_WORKING = True  # Record the methods taken by the program.
+LOG_WORKING = False  # Write the working log to a file & print to console.
 log_directory = 'data/working.log'
 
 name_binary = ('2', 'bin', 'binary')

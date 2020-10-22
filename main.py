@@ -4,6 +4,7 @@ and number representation systems.
 Task 1.4.1.f Kevin Gao
 """
 
+from itertools import count
 from constants import *
 from digit import DigitCollection
 import working
@@ -114,6 +115,7 @@ def evaluate_steps(steps):
     the request's instructions & return working."""
     working.clear()
     working.working = []
+    working.id_counter = count(0)
 
     if step_type(steps[0]) != NEW_NUMBER:
         raise ValueError('The list of steps must start with a number.')
@@ -156,9 +158,8 @@ def evaluate_steps(steps):
                 working.log_method('Representation: Result', x, priority_level=1)
 
         # Record any working, if any has been added to the log during this step.
-        if working.current_step:
-            entry = ''.join(working.current_step_title) + ''.join(working.current_step)
-            working.working.append(entry)
+        if USE_WORKING and working.current_step:
+            working.working.append(working.current_step)
 
     if step_type(memory) == NEW_NUMBER:
         answer = str(memory)

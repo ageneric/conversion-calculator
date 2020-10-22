@@ -71,7 +71,6 @@ input, button {
 ol, ul {
   border-left: 5px solid #cdc5d9;
   background-color: #f1f1f1;
-  padding: 0.6em 0;
   border-radius: 3px;
 }
 
@@ -130,17 +129,22 @@ li.step {
   padding-left: 2em;
 }
 
+h3.step-header {
+  padding: 0.5em 0em;
+  margin: 0em 0em;
+}
+
 li.working-header {
   list-style: none;
 }
 
-li.working {
+li.working-legend {
   list-style: circle;
   padding-left: 2em;
+  padding-top: 0.2em;
 }
 
-li.working-small {
-  color: var(--theme-primary);
+li.working {
   font-size: 0.85rem;
   padding-left: 2rem;
 }

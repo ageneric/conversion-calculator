@@ -283,7 +283,7 @@ is only supported between two DigitCollection() instances.')
             value, new_digit = divmod(value, base)
             digits.insert(0, new_digit)  # Remainders are inserted in reverse order.
 
-            if SAVE_WORKING:
+            if USE_WORKING:
                 log_method('Value divided by the base', f'result {value}', f'remainder {new_digit}')
             run_at_least_once = True
 
