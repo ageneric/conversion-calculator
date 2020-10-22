@@ -7,11 +7,13 @@
 </head>
 <body>
   <div id="top" class="bar">
-    <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">prototype</div>
+    <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">v1</div>
   </div>
   <div class="text">
-    <p>The web environment of this task is a work in progress. Add numbers and instructions to the list, then send!</p>
-    <p>The returning request is viewable in the Network tab of most browser developer consoles.</p>
+    <p>A single value will be stored and modified by the list of steps, configured below.
+       To start, add a <span class="highlight">number</span> to the list of steps to be processed.</p>
+    <p>Steps are executed in the order from top to bottom. Please note that addition requires an extra number,
+       after the addition instruction, which is added to the value in memory.</p>
     <h2>Enter data</h2>
     <div id="step-picker"></div>
     
@@ -22,6 +24,7 @@
       <div id="working"></div>
     </div>
   </div>
+  <p id="footer-text">developed by kevin gao (<a href="https://github.com/ageneric/conversion-calculator/">git</a>), updated 2020-10-21.</p>
 </body>
 
 <!-- js -->

@@ -1,19 +1,22 @@
-from constants import SAVE_WORKING, log_directory
+from constants import SAVE_WORKING, LOCAL_DEBUG, log_directory
 
-
+# Modified using global by log_method().
+# Used by main while evaluating steps.
 working = []
 current_step = []
-synchronise_step_count = 0
+current_step_title = ''
 
 def clear():
-    with open(log_directory, 'w'):
-        pass
+    if LOCAL_DEBUG:
+        with open(log_directory, 'w'):
+            pass
 
 def log_method(message, *args, priority_level=-1):
     if not SAVE_WORKING:
         return
 
-    global working
+    global current_step
+    global current_step_title
 
     if args:
         content = f'{message}: {", ".join(map(str, args))}'
@@ -21,25 +24,22 @@ def log_method(message, *args, priority_level=-1):
         content = f'{message}.'
 
     if priority_level >= 2:
-        # working.append(f'<ul>{content}</ul>')
-        working.append(f'[step: {content}]...')
+        current_step_title = f'<h3>{content}</h3>'
         displayed = f'[Step] {content}'
     elif priority_level == 1:
-        # working.append(f'<li class="working-header">{content}</li>')
-        working.append(f'[head: {content}]')
+        current_step.append(f'<li class="working-header">{content}</li>')
         displayed = f'|*| {content}'
     elif priority_level == 0:
-        # working.append(f'<li class="working-double">{content}</li>')
-        working.append(f'[work: {content}]')
+        current_step.append(f'<li class="working">{content}</li>')
         displayed = f' *  {content}'
     else:
-        # working.append(f'<li class="working">{content}</li>')
-        working.append(f'{content}')
+        current_step.append(f'<li class="working-small">{content}</li>')
         displayed = f'| {content}'
 
-    print(displayed)
-    with open(log_directory, 'a') as log_file:
-        log_file.write(displayed + '\n')
+    if LOCAL_DEBUG:
+        print(displayed)
+        with open(log_directory, 'a') as log_file:
+            log_file.write(displayed + '\n')
 
 
 clear()

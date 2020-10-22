@@ -1,7 +1,8 @@
 """Starts a Flask server for interacting with the program."""
 
 from flask import Flask, render_template, request
-from main import *
+from main import handle_request
+import json
 
 app = Flask(__name__)
 
@@ -13,20 +14,13 @@ def index():
 def calculation():
     if request.method == 'POST':
         json_items = request.get_json()
+        answer, method = handle_request(json_items)
 
-        try:
-            steps = parse_request(json_items)
-            answer, method = evaluate_steps(steps)
-        except Exception as generic_error:
-            print(generic_error)
-            answer, method = 'null', 'Error: ' + str(generic_error)
-
-        # Escape all strings. Cannot use single quotes, as JSON
-        # will only accept double quotes / escaped double quotes.
-        # TODO: switch to json module (None -> "null", escape quotes).
-        method = str(method).replace('"', r'\"').replace('\'', r'"')
-        result = f'"answer": "{answer}", "method": "{method}"'
-        result = '{' + result + '}'  # Format for JSON parsing.
+        # Form a valid, escaped JSON string with the data.
+        # In case of error during request handling, answer will be None.
+        # Its JSON equivalent will be parsed as null and warn the user.
+        result = {'answer': answer, 'method': method}
+        result = json.dumps(result)
         return result, 200
 
     return '', 200

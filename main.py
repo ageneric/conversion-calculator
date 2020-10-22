@@ -148,22 +148,36 @@ def evaluate_steps(steps):
                 working.log_method('Add the next value supplied', priority_level=2)
                 operation = f_name
             else:
+                # Get the requested method's value.
                 working.log_method('Display', f_name, priority_level=2)
-                x = digit_method_value(f_name)
+                x = digit_method_value(memory, f_name)
+
                 representations.append(x)
                 working.log_method('Representation: Result', x, priority_level=1)
 
-        # If any working has been added to the log during the step.
+        # Record any working, if any has been added to the log during this step.
         if working.current_step:
-            working.working.append(working.current_step)
+            entry = ''.join(working.current_step_title) + ''.join(working.current_step)
+            working.working.append(entry)
 
     if step_type(memory) == NEW_NUMBER:
         answer = str(memory)
     else:
         raise ValueError('Corrupted memory during steps execution.')
 
-    method = '<div>' + '</div><div>'.join(working.working) + '</div>'
-    return answer, method
+    return answer, working.working
+
+def handle_request(json_items):
+    """Called to parse and evaluate any requests sent to
+    the application. Takes a JSON-style structure (see
+    parse_request() and returns answer=None on any error."""
+    try:
+        steps = parse_request(json_items)
+        answer, method = evaluate_steps(steps)
+        return answer, method
+    except Exception as generic_error:
+        print(generic_error)
+        return None, f'Error while evaluating steps: {generic_error}'
 
 
 if __name__ == '__main__':

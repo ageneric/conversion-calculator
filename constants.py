@@ -8,7 +8,8 @@ inv_extended_numerals = {
 }
 
 BREAK_ON_ERROR = True
-SAVE_WORKING = True
+SAVE_WORKING = True  # Record the methods taken by the program.
+LOCAL_DEBUG = False  # Write the working log to a file & print to console.
 log_directory = 'data/working.log'
 
 name_binary = ('2', 'bin', 'binary')
@@ -17,7 +18,7 @@ name_decimal = ('10', 'dec', 'decimal', 'denary')
 name_hexadecimal = ('16', 'hex', 'hexadecimal')
 name_bcd = ('bcd', 'binary coded decimal', 'packed')
 
-conversions = ('2', '8', '10', '16')
+conversions = ('2', '8', '10', '16', 'bcd')
 functions = ('add', 'numerals', 'value', 'pad_to_bytes',
              'one_complement', 'two_complement', 'sign_and_magnitude')
 

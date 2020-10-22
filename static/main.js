@@ -5,9 +5,9 @@ function submit() {
     return;
   }
   console.log(items);
-  
+
   var xhr = new XMLHttpRequest();
-  
+
   xhr.open('POST', '/result');
   xhr.setRequestHeader('Content-Type', 'application/json;charset=utf-8');
   xhr.onload = function() {
@@ -15,30 +15,28 @@ function submit() {
       console.log(xhr.responseText);
       response = JSON.parse(xhr.responseText);
       if (response.answer) {
-        // TODO: check for "null"
         document.getElementById('final').innerHTML = 'Final value: ' + response.answer;
-        alert(response.method);
+
+        document.getElementById('working').innerHTML = '';  // Clear any previous displayed text.
+        response.method.forEach(newULElementFromHTML);  // Add each element as a <ul> to working.
       }
       else {
-        document.getElementById('final').innerHTML = 'Responded with error.';
+        // Show the caught error message from failed step parsing/execution.
+        document.getElementById('final').innerHTML = response.method;
       }
-      /* working = createElementFromHTML(response.method);
-      document.innerHTML = '';  // Clear any previous displayed text.
-      document.getElementById('working').appendChild(working); */
     }
     else if (xhr.status !== 200) {
       alert('Request failed. Returned status of ' + xhr.status);
     }
   };
-  
+
   xhr.send(JSON.stringify(items));
 }
 
-function createElementFromHTML(htmlString) {
-  var div = document.createElement('div');
-  div.innerHTML = htmlString;
-
-  return div.firstChild;
+function newULElementFromHTML(htmlString) {
+  var ul = document.createElement('ul');
+  ul.innerHTML = htmlString;
+  document.getElementById('working').appendChild(ul);
 }
 
 class AddStep extends React.Component {
@@ -57,14 +55,10 @@ class AddStep extends React.Component {
   render() {
     // Generated code, read the equivalent in /jsx.
     return React.createElement("div",null,
-      React.createElement("div",{"class":"form"},
-        React.createElement("div",{"class":"flex-item"},React.createElement("label",{"for":"numeric-base"},"Base"),React.createElement("select",{id:"numeric-base",onChange:this.changeBase,value:this.state.base},React.createElement("option",{value:"2"},"Binary"),React.createElement("option",{value:"8"},"Octal"),React.createElement("option",{value:"10",selected:true},"Decimal"),React.createElement("option",{value:"16"},"Hexadecimal"),React.createElement("option",{value:"BCD"},"BCD"))),React.createElement("div",{"class":"flex-item"},React.createElement("label",{id:"numeric-digits"},"Digits ",React.createElement("span",{"class":"note"},"(- for negative)")),React.createElement("input",{type:"text",name:"numeric-digits",onChange:this.changeNumeric,value:this.state.numeric})),React.createElement("div",{"class":"flex-item"},React.createElement("button",{onClick:this.submitNumber},"Add Number"))),
-      React.createElement("div",{"class":"form"},
-        React.createElement("div",{"class":"flex-item-double"},React.createElement("label",{"for":"calculation"},"Calculations"),React.createElement("select",{id:"calculation",onChange:this.changeCalcType,value:this.state.calcType},React.createElement("option",{value:"2",selected:true},"To Binary"),React.createElement("option",{value:"8"},"To Octal"),React.createElement("option",{value:"10"},"To Decimal"),React.createElement("option",{value:"16"},"To Hexadecimal"),React.createElement("option",{value:"BCD"},"To BCD"),React.createElement("option",{value:"add"},"Add Next"),React.createElement("option",{value:"numerals"},"Display Numerals"),React.createElement("option",{value:"value"},"Display Base 10 Value"),React.createElement("option",{value:"pad_to_bytes"},"Display as Bytes"),React.createElement("option",{value:"sign_and_magnitude"},"Display Sign and Mag."),React.createElement("option",{value:"one_complement"},"Display One's Complement"),React.createElement("option",{value:"two_complement"},"Display Two's Complement"))),
-        React.createElement("div",{"class":"flex-item"},React.createElement("button",{onClick:this.submitCalc},"Add Calculation"))),
-      React.createElement("button",{id:"clear",onClick:this.clear},"Clear All Steps"),
-      React.createElement("p",null,"Each step here will be evaluated from top to bottom. The final value will also be returned."),
-      React.createElement(StepList,{items:this.state.items}));
+      React.createElement("div",{"class":"form"},React.createElement("div",{"class":"flex-item"},React.createElement("label",{"for":"numeric-base"},"Base"),React.createElement("select",{id:"numeric-base",onChange:this.changeBase,value:this.state.base},React.createElement("option",{value:"2"},"Binary"),React.createElement("option",{value:"8"},"Octal"),React.createElement("option",{value:"10",selected:true},"Decimal"),React.createElement("option",{value:"16"},"Hexadecimal"),React.createElement("option",{value:"BCD"},"BCD"))),React.createElement("div",{"class":"flex-item"},React.createElement("label",{id:"numeric-digits"},"Digits ",React.createElement("span",{"class":"note"},"(- for negative)")),React.createElement("input",{type:"text",name:"numeric-digits",onChange:this.changeNumeric,value:this.state.numeric})),React.createElement("div",{"class":"flex-item"},React.createElement("button",{onClick:this.submitNumber},"Add Number"))),
+      React.createElement("div",{"class":"form"},React.createElement("div",{"class":"flex-item-double"},React.createElement("label",{"for":"calculation"},"Calculations"),React.createElement("select",{id:"calculation",onChange:this.changeCalcType,value:this.state.calcType},React.createElement("option",{value:"2",selected:true},"To Binary"),React.createElement("option",{value:"8"},"To Octal"),React.createElement("option",{value:"10"},"To Decimal"),React.createElement("option",{value:"16"},"To Hexadecimal"),React.createElement("option",{value:"BCD"},"To BCD"),React.createElement("option",{value:"add"},"Add Next"),React.createElement("option",{value:"numerals"},"Display Numerals"),React.createElement("option",{value:"value"},"Display Base 10 Value"),React.createElement("option",{value:"pad_to_bytes"},"Display as Bytes"),React.createElement("option",{value:"sign_and_magnitude"},"Display Sign and Mag."),React.createElement("option",{value:"one_complement"},"Display One's Complement"),React.createElement("option",{value:"two_complement"},"Display Two's Complement"))),React.createElement("div",{"class":"flex-item"},React.createElement("button",{onClick:this.submitCalc},"Add Calculation"))),React.createElement("button",{id:"clear",onClick:this.clear},"Clear All Steps"),React.createElement("p",null,"Modify the list of steps below."),
+      React.createElement(StepList,{items:this.state.items})
+    );
   }
 
   clear(e) {
@@ -141,7 +135,7 @@ class StepList extends React.Component {
       null,
       this.props.items.map(item => React.createElement(
         "li",
-        { key: item.id },
+        { key: item.id, class: "step" },
         item.string
       ))
     );
