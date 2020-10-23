@@ -1,6 +1,20 @@
-// React JS is generated using:
-// https://infoheap.com/online-react-jsx-to-javascript/
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversions Calculator</title>
+  <link href="static/styles.css" rel="stylesheet"/>
+</head>
+<body>
+<div id="top" class="bar">
+  <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">v1</div>
+</div>
+<div class="text">
+  <p>A single value will be stored and modified on the Python web server, while the list of steps configured below is processed.
+    To start, add a <span class="highlight">number</span> to the list of steps to run.</p>
+  <p>Steps are executed in the order from top to bottom. Please note that addition requires a following number, which is added to the value in memory.</p>
+  <h2>Enter data</h2>
+  <div id="step-picker">
     <div>
       <div class="form">
         <div class="flex-item">
@@ -50,3 +64,20 @@
       <p>Modify the list of steps below.</p>
       <StepList items={this.state.items} />
     </div>
+  </div>
+
+  <h2>Output</h2>
+  <div id="output">
+    <button id="submit" onclick="submit()">Send!</button>
+    <p id="final">The result & working will be placed here once calculated.</p>
+    <div id="working"></div>
+  </div>
+</div>
+<p class="small">developed by kevin gao (git: @ageneric), updated 2020-10-21.</p>
+</body>
+
+<!-- js -->
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="static/main.js"></script>
+</html>

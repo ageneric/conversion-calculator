@@ -1,12 +1,16 @@
-"""Demonstrates conversions between bases
-and number representation systems.
+"""Demonstrates conversions between different
+bases and number representation systems.
 
-Task 1.4.1.f Kevin Gao
+Includes a Flask web application for interacting
+with the program. Enable USE_WORKING in constants.
+  FLASK_APP=run_app.py
+
+(Kevin Gao) https://github.com/ageneric/conversion-calculator/
 """
 
 from itertools import count
 from constants import *
-from digit import DigitCollection
+from digit import DigitValue
 import working
 
 
@@ -22,7 +26,7 @@ def parse_request(json_items):
                 new_base, new_wrap_point = valid_base(step['base'])
                 new_digits, new_polarity = parse_numeric(step['numeric'])
 
-                new = DigitCollection(new_digits, new_polarity, new_base, new_wrap_point)
+                new = DigitValue(new_digits, new_polarity, new_base, new_wrap_point)
                 raw_method.append(new)
             elif step['type'] == 'calculation':
                 calc = step['calc'].lower()
@@ -84,7 +88,7 @@ def parse_numeric(numeric: str):
         return digits, polarity
 
 def step_type(step):
-    if isinstance(step, DigitCollection):
+    if isinstance(step, DigitValue):
         return NEW_NUMBER
 
     try:
@@ -182,34 +186,28 @@ def handle_request(json_items):
 
 
 if __name__ == '__main__':
-    print("""* It is preferred to use the Flask web app included, by running
-run_app.py with Flask - but if that is not possible, this example is included too.
-
-Run digit.py in an IDE to test it. Each DigitCollection is an object, for example:
->>> Digit("15", base=DECIMAL)
-""")
-
+    print(__doc__)
+    print("\nDemo value --")
+    
     working.clear()
+    
     digits = []
-    polarity = 0
     base = wrap_point = DECIMAL
+    polarity = 0
 
     request_input = True
     while request_input:
-        working_value = input("digit values (comma separated): ")
-        working_polarity = input("is positive: ")
-        working_base = input("base (name ie. decimal): ")
+        working_base = input("  Base [i.e. (bin)ary]: ")
+        digits, polarity = parse_numeric(input("  Number [i.e. 10]: "))
 
         try:
-            digits = list(map(int, working_value.split(",")))
-            polarity = 1 if "n" in working_polarity.lower() else 0
             base, wrap_point = valid_base(working_base)
             request_input = False
-
         except ValueError as e:
             print(f"Invalid values entered.\n{e}")
 
-    example = DigitCollection(digits, polarity, base, wrap_point)
-    print(f'Str value  {example}')
+    example = DigitValue(digits, polarity, base, wrap_point)
+    print(f'\nStr value  {example}')
     print(f'Numerals   {example.numeral()}')
     print(f'Int value  {example.value()}')
+    print(f"2's Complement {example.two_complement()}")
