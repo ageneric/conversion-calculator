@@ -1,5 +1,5 @@
 # Conversion Calculator
-Task 1.4.1.f - Python 3.7 or 3.8
+(Assignment) for Python 3.7 or 3.8
 
 You may be able to try the [web app](https://generic.eu.pythonanywhere.com/) here, if it's running.
 
@@ -32,9 +32,13 @@ Use the `.pad_to_bytes()` method to return the number as binary.
 
 ## Program Use
 
-May be run as a text-based demo by running main.py, or by running digit.py in an interactive Python console (ie. the IDLE shell).
+May be run as a text-based demo by running main.py, or by running digit.py in an interactive Python console (i.e. the IDLE shell).
 There is a Flask web app included. Use Flask with environment variable `FLASK_APP` set to `run_app.py`.
+Example use of the `DigitValue` class and associated functionality can be found in digit.py under test().
 
 Note: the intention of this project is to demonstrate computational methods for conversion,
 rather than being a general-purpose and efficient library. However, digit.py is technically usable
 as its own module - make sure to include constants.py and disable working with `USE_WORKING = False`.
+
+Provided "as is": no guarantee that this won't crash or break. The software and associated documentation files
+may be used, copied, modified and distributed without restriction, as long as this isn't your assignment work :)
