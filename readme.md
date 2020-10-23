@@ -1,5 +1,7 @@
 # Conversion Calculator
-Task 1.4.1.f - CPython 3.7 or 3.8
+Task 1.4.1.f - Python 3.7 or 3.8
+
+You may be able to try the [web app](https://generic.eu.pythonanywhere.com/) here, if it's running.
 
 ## Specification
 Design and program a calculator which allows the user to, 
@@ -19,19 +21,20 @@ Design and program a calculator which allows the user to,
 
 ## Data
 
-This program defines DigitCollection(), wrapping an array of integer digits and providing conversion methods.
+This program defines `DigitValue` to represent an array of integer digits, providing conversion methods
+to different bases and numeric systems.
 
 Negative numeric values are specified with the polarity property (1 for negative, 0 for positive).
-This is equivalent to the "sign bit" of a sign-and-magnitude binary number.
+This is equivalent to the "sign bit" of a sign-and-magnitude binary number. -0 is invalid.
 
 Binary coded decimal is represented using `base=DECIMAL, wrap_point=HEXADECIMAL` (not `BINARY`).
 Use the `.pad_to_bytes()` method to return the number as binary.
 
-Perform addition for place-value numbers using `DigitCollection() + DigitCollection() -> DigitCollection()`.
-
 ## Program Use
 
-The program can be run in a limited, text-based mode by running main.py.
-There is also a Flask web app included. Use Flask with FLASK_APP = run_app.py.
+May be run as a text-based demo by running main.py, or by running digit.py in an interactive Python console (ie. the IDLE shell).
+There is a Flask web app included. Use Flask with environment variable `FLASK_APP` set to `run_app.py`.
 
-Alternatively, running digit.py in an interactive Python console (ie. the IDLE shell) will give access to all core functionality.
+Note: the intention of this project is to demonstrate computational methods for conversion,
+rather than being a general-purpose and efficient library. However, digit.py is technically usable
+as its own module - make sure to include constants.py and disable working with `USE_WORKING = False`.
