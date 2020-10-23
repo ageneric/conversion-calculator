@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Conversions Calculator</title>
+  <link href="static/styles.css" rel="stylesheet"/>
+</head>
+<body>
+  <div id="top" class="bar">
+    <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">v1</div>
+  </div>
+  <div class="text">
+    <p>A single value will be stored and modified by the list of steps, configured below.
+       To start, add a <span class="highlight">number</span> to the list of steps to be processed.</p>
+    <p>Steps are executed in the order from top to bottom. Please note that addition requires an extra number,
+       after the addition instruction, which is added to the value in memory.</p>
+    <h2>Enter data</h2>
+    <div id="step-picker"></div>
+    
+    <h2>Output</h2>
+    <div id="output">
+      <button id="submit" onclick="submit()">Send!</button>
+      <p id="final">Once you're ready, click Send! The result & working will be placed here calculated.</p>
+      <div id="working"></div>
+    </div>
+  </div>
+  <p id="footer-text">developed by kevin gao (<a href="https://github.com/ageneric/conversion-calculator/">git</a>), last updated 2020-10-22.</p>
+</body>
+
+<!-- js -->
+<script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
+<script src="static/main.js"></script>
+<script src="static/submit.js"></script>
+</html>

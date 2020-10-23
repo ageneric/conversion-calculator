@@ -1,11 +1,32 @@
 """This numeric-style class represents an integer value in a specified base.
 It it stored digit-wise as a demonstration of computing addition and
-other numeric methods. An Array is defined here as either a Tuple or List.
+other numeric methods. Note: an "array" here refers to either Tuple or List.
+
+Please see test() for example usage. Run this file to run all tests.
+
+Digit.py may be used as a module/package (if you really want to).
+This requires constants.py, and also working.py if working is enabled.
+(Kevin Gao) https://github.com/ageneric/conversion-calculator/
 """
 
-from constants import *
+# Module imports --
+try:
+    from constants import *
+except ModuleNotFoundError:
+    raise ModuleNotFoundError("Digit: Requires constants.py.")
 
+try:
+    from working import log_method
+except ModuleNotFoundError:
+    if USE_WORKING:
+        raise ModuleNotFoundError("Digit: If USE_WORKING (constants.py) is enabled, \
+requires working.py, in order to record working. Please either disable USE_WORKING, \
+in constants.py, or add the required file.")
+    else:
+        def log_method(*placeholder):
+            pass
 
+# Definitions --
 def pad_left(content: iter, padding_length: int, fillchar=0):
     """Pads zeroes to the start of the content iterable."""
     final = [fillchar] * padding_length
@@ -43,24 +64,29 @@ def two_complement_value(digits: iter, base=2):
     return total
 
 
-class BaseDigit:
-    """Wraps an array of integer digits representing a number in an
-    arbitrary fashion. For two's complement values, the sign may be
-    held implicitly."""
+class DigitList:
+    """Wraps a list of integer digits, with a specified
+    base. Provides methods to represent this number.
+    Does not assume a place-value."""
 
     def __init__(self, digits, base=10, wrap_point=None):
         self.base = base
         # wrap_point: the digit wrap-around point used:
-        # binary coded decimal / BCD would use (base=10, wrap_point=16).
+        # packed binary coded decimal / BCD would use (base=10, wrap_point=16).
         self.wrap_point = base if wrap_point is None else wrap_point
 
         self.digits = sanitise_digits(digits, self.base, self.wrap_point)
 
     def __repr__(self):
-        return f'BaseDigit({self.digits}, {self.base}, {self.wrap_point})'
+        return f'DigitList({self.digits}, {self.base}, {self.wrap_point})'
 
     def __str__(self):
-        return f'{self.numeral()}: base {self.base}'
+        if self.base == self.wrap_point:
+            return f'(#{self.numeral()}: base {self.base})'
+        elif self.base == DECIMAL and self.wrap_point == HEXADECIMAL:
+            return f'(#{self.numeral()}: BCD, base 10 / 16)'
+        else:
+            return f'(#{self.numeral()}: Custom, base {self.base} / {self.wrap_point})'
 
     @staticmethod
     def add_iterable(first_digits, second_digits, base):
@@ -68,46 +94,42 @@ class BaseDigit:
         if len(first_digits) != len(second_digits):
             raise UserWarning("the digits to be added have not been padded to \
 the same length. This may cause digits to be skipped during addition.")
+
+        log_method('Pair digits together and add', first_digits, second_digits,
+                   f'in base {base}', priority_level=1)
         result_digits = []
 
         # Iterate through pairs of digits, least digit first, and perform addition.
         carry = 0
         for first, second in zip(reversed(first_digits), reversed(second_digits)):
             _sum = first + second + carry
+            log_method(f'Find sum of', first, second, carry, f'total {_sum}')
             if _sum >= base:
                 carry, _sum = divmod(_sum, base)
+                log_method(f'Total value has carry')
             else:
                 carry = 0  # Reset carry so that values are only carried over once.
             result_digits.insert(0, _sum)
 
+        log_method(f'Partial addition result', result_digits, f'with carry {carry}')
         return result_digits, carry
 
     # -- representation methods --
     def pad_to_bytes(self):
         """Pads digits (converted to binary) with zeroes such that
         bits are byte-aligned. Always returns an array of bits.
-        Will always pad at least one redundant zero, even if digits
-        are already byte-aligned: 11111111 -> 0000000011111111."""
-        positive_equivalent = DigitCollection(self.digits, 0, self.base, self.wrap_point)
+        Always pads at least one redundant zero, even if digits
+        are already byte-aligned: (+/-)11111111 -> 0000000011111111."""
+        log_method('Pad to byte-aligned binary', self, priority_level=0)
+        positive_equivalent = DigitValue(self.digits, 0, self.base, self.wrap_point)
         binary = positive_equivalent.convert_base(BINARY)
         bits_needed = len(binary.digits)
 
         # Returns the binary digit array, consisting of [padding...] + [digits...]
         padding_length = 8 - (bits_needed % 8)
         bits = pad_left(binary.digits, padding_length)
+        log_method('Padded binary', bits, f'with padding length {padding_length}')
         return bits
-
-    def one_complement(self):
-        padded_binary = self.pad_to_bytes()
-        return BaseDigit(flip_values(padded_binary, 1), BINARY)
-
-    def two_complement(self):
-        _one_complement = self.one_complement()
-        # Pad "1" with leading zeroes, so it can be added to the one's complement.
-        one = pad_left((1,), len(_one_complement.digits) - 1)
-        incremented, _ = _one_complement.add_iterable(_one_complement.digits, one,
-                                                      _one_complement.base)
-        return BaseDigit(incremented, BINARY)
 
     def numeral(self):
         """Returns the number as a single string, represented
@@ -123,7 +145,7 @@ the same length. This may cause digits to be skipped during addition.")
         return ''.join(numerals)
 
 
-class DigitCollection(BaseDigit):
+class DigitValue(DigitList):
     """Wraps an array of integer digits representing a number in any base.
     Represents negative numbers with the polarity variable."""
 
@@ -134,7 +156,7 @@ class DigitCollection(BaseDigit):
             # Invalid polarity bit provided (personally a common syntax error).
             if polarity_bit in [BINARY, OCTAL, DECIMAL, HEXADECIMAL]:
                 error_message = f'polarity bit must be either 0 (positive) or \
-1 (negative).\n  Did you mean DigitCollection({digits}, base={polarity_bit}...)?'
+1 (negative).\n  Did you mean DigitValue({digits}, base={polarity_bit}...)?'
             else:
                 error_message = f'polarity bit must be either 0 (positive) or \
 1 (negative), not {polarity_bit}.'
@@ -144,43 +166,53 @@ class DigitCollection(BaseDigit):
 
     @classmethod
     def init_from_value(cls, value: int, base=10, wrap_point=None):
-        """Initialises a new DigitCollection with the value of
+        """Initialises a new DigitValue with the value of
         the integer specified. Accepts numeric-valid strings."""
         polarity_bit = 0 if int(value) >= 0 else 1
         wrap_point = base if wrap_point is None else wrap_point
+        log_method('Initialise new custom number', value, f'in base {base}', wrap_point,
+                   priority_level=0)
 
         digits = str(abs(int(value)))
         return cls(digits, polarity_bit).convert_base(base, wrap_point)
 
     def __repr__(self) -> str:
-        return f'DigitCollection({self.digits}, {self.polarity}, \
+        return f'DigitValue({self.digits}, {self.polarity}, \
 {self.base}, {self.wrap_point})'
 
     def __str__(self) -> str:
-        return f'{self.numeral()}: base {self.base}'
+        if self.base == self.wrap_point:
+            return f'({self.numeral()}: base {self.base})'
+        elif self.base == DECIMAL and self.wrap_point == HEXADECIMAL:
+            return f'({self.numeral()}: BCD, base 10 / 16)'
+        else:
+            return f'({self.numeral()}: Custom, base {self.base} / {self.wrap_point})'
 
     def __add__(self, other):
-        """Add together two DigitCollection instances. Positive
+        """Add together two DigitValue instances. Positive
         numbers are added within the base of the left component.
         Negative numbers add using binary two's complement.
         Returns its answer in the base of the left component."""
         if not isinstance(other, self.__class__):
-            raise TypeError("unsupported operand type(s) for +. Addition \
-is only supported between two DigitCollection() instances.")
+            raise TypeError('unsupported operand type(s) for +. Addition \
+is only supported between two DigitValue() instances.')
 
         _self = self
         is_two_complement = [False, False]
 
         # Converts negative numbers to two's complement for cleaner addition.
         if self.polarity:
+            log_method("First number is negative. Convert to two's complement")
             _self = self.two_complement()
             is_two_complement[0] = True
 
         if other.polarity:
+            log_method("Second number is negative. Convert to two's complement")
             other = other.two_complement()
             is_two_complement[1] = True
 
         # After the first's base is set, convert the other component to the same base.
+        log_method('Convert both numbers to the same base')
         if any(is_two_complement):
             if not is_two_complement[0]:  # Converts if not already a binary complement.
                 _self = _self.convert_base(other.base, other.wrap_point)
@@ -210,14 +242,17 @@ is only supported between two DigitCollection() instances.")
             # For positive two's complement, the first digit must stay a zero.
             if result_digits[0] != 0:
                 result_digits.insert(0, 0)
+            log_method('As the sum is positive, the carry is checked and added to the result.', result_digits)
         else:
             # If either component is negative the carry can be safely ignored.
-            pass
+            log_method('As one of the numbers is negative, the carry can be safely ignored')
 
         # Convert the final sum to its non-normalised value.
         result_value = two_complement_value(result_digits, _self.base)
         # Finally, switch back to the original base of the first component.
-        return DigitCollection.init_from_value(result_value, self.base, self.wrap_point)
+        result = DigitValue.init_from_value(result_value, self.base, self.wrap_point)
+        log_method('As one of the numbers is negative, the carry can be safely ignored', priority_level=1)
+        return result
 
     # -- numeric methods --
     def value(self) -> int:
@@ -237,30 +272,70 @@ is only supported between two DigitCollection() instances.")
 
     def convert_base(self, base: int, wrap_point=None):
         """Implements repeated division to convert to and
-        return a DigitCollection of the specified base."""
+        return a DigitValue of the specified base."""
         wrap_point = base if wrap_point is None else wrap_point
+        log_method('Base conversion', self, f'new base {base}', wrap_point, priority_level=1)
 
         if base == self.base and wrap_point == self.wrap_point:  # Optimisation check.
-            return DigitCollection(self.digits, self.polarity, base, wrap_point)
+            return DigitValue(self.digits, self.polarity, base, wrap_point)
 
         digits = []
         value = abs(self.value())
         run_at_least_once = False
 
+        log_method('Use repeated division to find each place-value digit in the new base.')
         while value > 0 or not run_at_least_once:
             value, new_digit = divmod(value, base)
             digits.insert(0, new_digit)  # Remainders are inserted in reverse order.
+
+            if USE_WORKING:
+                log_method('Value divided by the base', f'result {value}', f'remainder {new_digit}')
             run_at_least_once = True
 
-        return DigitCollection(digits, self.polarity, base, wrap_point)
+        log_method('Base conversion result', digits)
+        return DigitValue(digits, self.polarity, base, wrap_point)
+
+    def negative(self):
+        """Return a copy with the opposite polarity."""
+        new_polarity = (self.polarity + 1) % 2  # Flip polarity (1 -> 0, 0 -> 1)
+        return DigitValue(self.digits, new_polarity, self.base, self.wrap_point)
 
     # -- representation methods --
+    def one_complement(self):
+        """Return the one's complement of the number, as an
+        array of byte-aligned binary. If the number is negative,
+        this will flip all bits; ensures the first bit is 1."""
+        log_method("One's complement", self, priority_level=1)
+        padded_binary = self.pad_to_bytes()
+        if self.polarity:
+            return DigitList(flip_values(padded_binary, 1), BINARY)
+        else:
+            log_method("Value is positive: two's complement is equivalent to binary")
+            return DigitList(padded_binary, BINARY)
+
+    def two_complement(self):
+        """Return the two's complement of the number."""
+        log_method("Two's complement", self, priority_level=1)
+        if self.polarity:
+            _one_complement = self.one_complement()
+            log_method("Use one's complement value in order to calculate two's complement",
+                       _one_complement, priority_level=0)
+            # Pad "1" with leading zeroes, so it can be added to the one's complement.
+            log_method("Increment one's complement by 1")
+            one = pad_left((1,), len(_one_complement.digits) - 1)
+            incremented, _ = _one_complement.add_iterable(_one_complement.digits, one,
+                                                          _one_complement.base)
+            return DigitList(incremented, BINARY)
+        else:
+            log_method("Value is positive: two's complement is equivalent to binary")
+            return DigitList(self.pad_to_bytes(), BINARY)
+
     def sign_and_magnitude(self):
         signed_binary = self.pad_to_bytes()
         if self.polarity:
             signed_binary[0] = 1
 
-        return BaseDigit(signed_binary, BINARY)
+        return DigitList(signed_binary, BINARY)
 
     def numeral(self) -> str:
         """Returns the number represented as a single string
@@ -272,41 +347,36 @@ is only supported between two DigitCollection() instances.")
 
 
 def test():
-    x = DigitCollection((1, 0, 10), base=HEXADECIMAL)
+    x = DigitValue((1, 0, 10), base=HEXADECIMAL)
     assert x.value() == 266
     assert (x + x).value() == x.value() * 2
 
-    y = DigitCollection((2, 4), base=OCTAL)
+    y = DigitValue((2, 4), base=OCTAL)
     assert y.value() == 20
-    assert (additive := (x + y).value()) == x.value() + y.value()
+
+    additive = (x + y).value()
+    assert additive == x.value() + y.value()
     assert additive == (y + x).value()
 
-    z = DigitCollection((2, 6, 6), 1, DECIMAL)
+    z = DigitValue((2, 6, 6), 1, DECIMAL)
     assert z.convert_base(BINARY).digits == [1, 0, 0, 0, 0, 1, 0, 1, 0]
     assert (z + z).value() == z.value() * 2
     assert (x + z).value() == 0
 
-    negative_x_complement = x.two_complement()  # Will assume negative polarity.
-    negative_x_value = two_complement_value(negative_x_complement.digits)
-    assert x.value() == -negative_x_value
+    two_complement = x.negative().two_complement()
+    assert -x.value() == two_complement_value(two_complement.digits) == x.negative().value()
 
-    equal_to_x = DigitCollection.init_from_value(-negative_x_value, x.base, x.wrap_point)
-    assert equal_to_x.__dict__ == x.__dict__  # Check they have identical attributes.
-
-    no_overflow = DigitCollection((0, 1, 1, 1, 1, 1, 1, 1), base=BINARY)
+    no_overflow = DigitValue((0, 1, 1, 1, 1, 1, 1, 1), base=BINARY)
     assert (no_overflow + no_overflow + no_overflow).value() == no_overflow.value() * 3
 
-    _dec = DigitCollection((2, 5), base=DECIMAL)
+    _dec = DigitValue((2, 5), base=DECIMAL)
     _bcd = _dec.convert_base(DECIMAL, HEXADECIMAL)
     assert _bcd.digits == _dec.digits
-    assert _bcd.pad_to_bytes() == [0, 0, 1, 0, 0, 1, 0, 1]
+    assert _bcd.pad_to_bytes() == [0, 0, 1, 0,  # "2"
+                                   0, 1, 0, 1]  # "5"
 
-    print('DigitCollection: Test passed.')
+    print("DigitValue: test passed.")
 
 
 if __name__ == "__main__":
-    Digit = DigitCollection  # Alias for faster testing purposes.
-    num = Digit("25")
-    bcd = Digit("535", base=DECIMAL, wrap_point=HEXADECIMAL)
-
     test()
