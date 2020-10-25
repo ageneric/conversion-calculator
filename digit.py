@@ -1,30 +1,37 @@
 """This numeric-style class represents an integer value in a specified base.
 It it stored digit-wise as a demonstration of computing addition and
-other numeric methods. Note: an "array" here refers to either Tuple or List.
+other numeric methods. Note: "array" refers to either the Python tuple / list.
 
 Please see test() for example usage. Run this file to run all tests.
 
 Digit.py may be used as a module/package (if you really want to).
-This requires constants.py, and also working.py if working is enabled.
+To also log working, add working.py (set USE_WORKING and LOG_WORKING to True).
 (Kevin Gao) https://github.com/ageneric/conversion-calculator/
 """
 
-# Module imports --
 try:
-    from constants import *
+    from working import USE_WORKING, LOG_WORKING, log_method
+    if USE_WORKING and LOG_WORKING:
+        print('Digit: Working is enabled in working.py, and will be printed to console.')
+    elif USE_WORKING:
+        print('Digit: Working is enabled in working.py, only visible on import.')
 except ModuleNotFoundError:
-    raise ModuleNotFoundError("Digit: Requires constants.py.")
+    def log_method(*placeholder):
+        pass
 
-try:
-    from working import log_method
-except ModuleNotFoundError:
-    if USE_WORKING:
-        raise ModuleNotFoundError("Digit: If USE_WORKING (constants.py) is enabled, \
-requires working.py, in order to record working. Please either disable USE_WORKING, \
-in constants.py, or add the required file.")
-    else:
-        def log_method(*placeholder):
-            pass
+BINARY = 2
+OCTAL = 8
+DECIMAL = 10
+HEXADECIMAL = 16
+
+extended_numerals = {
+    10: 'a', 11: 'b', 12: 'c', 13: 'd',
+    14: 'e', 15: 'f'
+}
+
+inv_extended_numerals = {
+    value: key for key, value in extended_numerals.items()
+}
 
 # Definitions --
 def pad_left(content: iter, padding_length: int, fillchar=0):

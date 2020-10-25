@@ -2,16 +2,29 @@
 bases and number representation systems.
 
 Includes a Flask web application for interacting
-with the program. Enable USE_WORKING in constants.
+with the program. Enable USE_WORKING in working.
   FLASK_APP=run_app.py
 
 (Kevin Gao) https://github.com/ageneric/conversion-calculator/
 """
 
 from itertools import count
-from constants import *
-from digit import DigitValue
+from digit import DigitValue, BINARY, OCTAL, DECIMAL, HEXADECIMAL, inv_extended_numerals
 import working
+
+name_binary = ('2', 'bin', 'binary')
+name_octal = ('8', 'oct', 'octal')
+name_decimal = ('10', 'dec', 'decimal', 'denary')
+name_hexadecimal = ('16', 'hex', 'hexadecimal')
+name_bcd = ('bcd', 'binary coded decimal', 'packed')
+
+conversions = ('2', '8', '10', '16', 'bcd')
+functions = ('add', 'numerals', 'value', 'pad_to_bytes',
+             'one_complement', 'two_complement', 'sign_and_magnitude')
+
+CONVERSION = 0
+FUNCTION = 1
+NEW_NUMBER = 2
 
 
 def parse_request(json_items):
@@ -162,7 +175,7 @@ def evaluate_steps(steps):
                 working.log_method('Representation: Result', x, priority_level=1)
 
         # Record any working, if any has been added to the log during this step.
-        if USE_WORKING and working.current_step:
+        if working.USE_WORKING and working.current_step:
             working.working.append(working.current_step)
 
     if step_type(memory) == NEW_NUMBER:
@@ -184,21 +197,18 @@ def handle_request(json_items):
         print(generic_error)
         return None, f'Error while evaluating steps: {generic_error}'
 
-
-if __name__ == '__main__':
-    print(__doc__)
-    print("\nDemo value --")
-    
+def demo():
+    print("\n-- Demo value --")
     working.clear()
-    
+
     digits = []
     base = wrap_point = DECIMAL
     polarity = 0
 
     request_input = True
     while request_input:
-        working_base = input("  Base [i.e. (bin)ary]: ")
-        digits, polarity = parse_numeric(input("  Number [i.e. 10]: "))
+        working_base = input(" Base [i.e. (bin)ary]: ")
+        digits, polarity = parse_numeric(input(" Number [i.e. 10]: "))
 
         try:
             base, wrap_point = valid_base(working_base)
@@ -207,7 +217,12 @@ if __name__ == '__main__':
             print(f"Invalid values entered.\n{e}")
 
     example = DigitValue(digits, polarity, base, wrap_point)
-    print(f'\nStr value  {example}')
-    print(f'Numerals   {example.numeral()}')
-    print(f'Int value  {example.value()}')
-    print(f"2's Complement {example.two_complement()}")
+    print(f'\n  Str value  {example}')
+    print(f'  Numerals   {example.numeral()}')
+    print(f'  Int value  {example.value()}')
+    print(f"  2's Complement {example.two_complement()}")
+
+
+if __name__ == '__main__':
+    print(__doc__)
+    demo()

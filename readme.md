@@ -38,7 +38,7 @@ Example use of the `DigitValue` class and associated functionality can be found 
 
 Note: the intention of this project is to demonstrate computational methods for conversion,
 rather than being a general-purpose and efficient library. However, digit.py is technically usable
-as its own module - make sure to include constants.py and disable working with `USE_WORKING = False`.
+as its own module for dealing with base conversions (optionally with working.py to enable working).
 
 Provided "as is": no guarantee that this won't crash or break. The software and associated documentation files
 may be used, copied, modified and distributed without restriction, as long as this isn't your assignment work :)

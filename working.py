@@ -1,5 +1,9 @@
-from constants import USE_WORKING, LOG_WORKING, log_directory
 from itertools import count
+
+BREAK_ON_ERROR = True
+USE_WORKING = True  # Internally record the methods taken by the program.
+LOG_WORKING = False  # Write the working log to a file & print to console.
+log_directory = 'data/working.log'
 
 # Modified using global by log_method().
 # Used by main while evaluating steps.
@@ -11,8 +15,12 @@ id_counter = count(0)
 
 def clear():
     if LOG_WORKING:
-        with open(log_directory, 'w'):
-            pass
+        try:
+            with open(log_directory, 'w'):
+                pass
+        except FileNotFoundError:
+            raise FileNotFoundError(f'Working: Missing folder or file for logging \
+(writes to {log_directory}). Alternatively, disable logging: LOG_WORKING = False.')
 
 def log_method(message, *args, priority_level=-1):
     if not USE_WORKING:
@@ -30,10 +38,10 @@ def log_method(message, *args, priority_level=-1):
         displayed = f'Step: {content}'
     elif priority_level == 1:
         element = {'tag': 'li', 'class': 'working-header'}
-        displayed = f'| {content}'
+        displayed = f'| | {content}'
     elif priority_level == 0:
         element = {'tag': 'li', 'class': 'working-legend'}
-        displayed = f'- {content}'
+        displayed = f'| {content}'
     else:
         element = {'tag': 'li', 'class': 'working'}
         displayed = content
