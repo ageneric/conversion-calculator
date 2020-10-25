@@ -4,7 +4,7 @@ other numeric methods. Note: "array" refers to either the Python tuple / list.
 
 Please see test() for example usage. Run this file to run all tests.
 
-Digit.py may be used as a module/package (if you really want to).
+This file may be used as a module on its own (if you really want to).
 To also log working, add working.py (set USE_WORKING and LOG_WORKING to True).
 (Kevin Gao) https://github.com/ageneric/conversion-calculator/
 """
@@ -19,6 +19,7 @@ except ModuleNotFoundError:
     def log_method(*placeholder):
         pass
 
+# Constants for common bases (though any integer base >= 2 should be supported).
 BINARY = 2
 OCTAL = 8
 DECIMAL = 10
@@ -33,7 +34,6 @@ inv_extended_numerals = {
     value: key for key, value in extended_numerals.items()
 }
 
-# Definitions --
 def pad_left(content: iter, padding_length: int, fillchar=0):
     """Pads zeroes to the start of the content iterable."""
     final = [fillchar] * padding_length
@@ -48,10 +48,10 @@ def flip_values(digits: iter, max_value: int):
 
 def sanitise_digits(digits: iter, base: int, wrap_point: int):
     # Converts to a list of integer values.
-    digits = list(map(int, digits))
+    digits = [int(digit) for digit in digits]
 
     # Raise an error if any digits exceed the base.
-    if any(map(lambda n: n >= wrap_point, digits)):
+    if any(digit >= wrap_point for digit in digits):
         raise ValueError(f'digits {digits} cannot be represented in a base ({base}) \
 system where numbers wrap at {wrap_point}.')
     return digits
@@ -168,6 +168,9 @@ class DigitValue(DigitList):
                 error_message = f'polarity bit must be either 0 (positive) or \
 1 (negative), not {polarity_bit}.'
             raise ValueError(error_message)
+
+        if base < 2:
+            raise ValueError(f'base {base} is not supported (base is less than 2).')
 
         super().__init__(digits, base, wrap_point)
 
@@ -361,9 +364,9 @@ def test():
     y = DigitValue((2, 4), base=OCTAL)
     assert y.value() == 20
 
-    additive = (x + y).value()
-    assert additive == x.value() + y.value()
-    assert additive == (y + x).value()
+    add_total = (x + y).value()
+    assert add_total == x.value() + y.value()
+    assert add_total == (y + x).value()
 
     z = DigitValue((2, 6, 6), 1, DECIMAL)
     assert z.convert_base(BINARY).digits == [1, 0, 0, 0, 0, 1, 0, 1, 0]
