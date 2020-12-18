@@ -1,5 +1,5 @@
 "use strict";
-class WorkingList extends React.Component {
+class WorkingListApp extends React.Component {
   constructor(props) {
     super(props);
     this.state = {items: props.items};
@@ -69,6 +69,6 @@ function submit() {
 }
 
 var workingDisplay = ReactDOM.render(
-  React.createElement(WorkingList, {items: []}),
+  React.createElement(WorkingListApp, {items: []}),
   document.getElementById("working")
 );

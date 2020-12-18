@@ -146,8 +146,10 @@ def evaluate_steps(steps):
 
         _step_type = step_type(current_step)
         if _step_type == NEW_NUMBER:
+            # The next step is a number, which is either placed in memory,
+            # or if the last step was addition, added to the number in memory.
             if operation is None:
-                working.log_method('Overwritten stored number', current_step, priority_level=2)
+                working.log_method('Set stored number to', current_step, priority_level=2)
                 memory = current_step
             elif operation == functions[0]:
                 working.log_method('Addition', memory, current_step, priority_level=2)
@@ -172,7 +174,7 @@ def evaluate_steps(steps):
                 x = digit_method_value(memory, f_name)
 
                 representations.append(x)
-                working.log_method('Representation: Result', x, priority_level=1)
+                working.log_method('Result', x, priority_level=1)
 
         # Record any working, if any has been added to the log during this step.
         if working.USE_WORKING and working.current_step:

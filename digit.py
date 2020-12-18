@@ -110,15 +110,15 @@ the same length. This may cause digits to be skipped during addition.")
         carry = 0
         for first, second in zip(reversed(first_digits), reversed(second_digits)):
             _sum = first + second + carry
-            log_method(f'Find sum of', first, second, carry, f'total {_sum}')
+            log_method('Find sum of', first, second, carry, f'total {_sum}')
             if _sum >= base:
                 carry, _sum = divmod(_sum, base)
-                log_method(f'Total value has carry')
+                log_method(f'Carry {carry}')
             else:
                 carry = 0  # Reset carry so that values are only carried over once.
             result_digits.insert(0, _sum)
 
-        log_method(f'Partial addition result', result_digits, f'with carry {carry}')
+        log_method('Partial addition result', result_digits, f'with carry {carry}')
         return result_digits, carry
 
     # -- representation methods --
@@ -212,12 +212,14 @@ is only supported between two DigitValue() instances.')
 
         # Converts negative numbers to two's complement for cleaner addition.
         if self.polarity:
-            log_method("First number is negative. Convert to two's complement")
+            log_method("First number is negative. Convert to two's complement",
+                       priority_level=0)
             _self = self.two_complement()
             is_two_complement[0] = True
 
         if other.polarity:
-            log_method("Second number is negative. Convert to two's complement")
+            log_method("Second number is negative. Convert to two's complement",
+                       priority_level=0)
             other = other.two_complement()
             is_two_complement[1] = True
 
@@ -252,7 +254,7 @@ is only supported between two DigitValue() instances.')
             # For positive two's complement, the first digit must stay a zero.
             if result_digits[0] != 0:
                 result_digits.insert(0, 0)
-            log_method('As the sum is positive, the carry is checked and added to the result.', result_digits)
+            log_method('As neither number is negative, the carry is checked and added to the result.', result_digits)
         else:
             # If either component is negative the carry can be safely ignored.
             log_method('As one of the numbers is negative, the carry can be safely ignored')
@@ -261,7 +263,7 @@ is only supported between two DigitValue() instances.')
         result_value = two_complement_value(result_digits, _self.base)
         # Finally, switch back to the original base of the first component.
         result = DigitValue.init_from_value(result_value, self.base, self.wrap_point)
-        log_method('As one of the numbers is negative, the carry can be safely ignored', priority_level=1)
+        log_method(f'Addition result: {result}', priority_level=1)
         return result
 
     # -- numeric methods --
@@ -293,7 +295,7 @@ is only supported between two DigitValue() instances.')
         value = abs(self.value())
         run_at_least_once = False
 
-        log_method('Use repeated division to find each place-value digit in the new base.')
+        log_method('Use repeated division to find each place-value digit in the new base')
         while value > 0 or not run_at_least_once:
             value, new_digit = divmod(value, base)
             digits.insert(0, new_digit)  # Remainders are inserted in reverse order.
@@ -315,7 +317,7 @@ is only supported between two DigitValue() instances.')
         """Return the one's complement of the number, as an
         array of byte-aligned binary. If the number is negative,
         this will flip all bits; ensures the first bit is 1."""
-        log_method("One's complement", self, priority_level=1)
+        log_method("One's complement of", self, priority_level=1)
         padded_binary = self.pad_to_bytes()
         if self.polarity:
             return DigitList(flip_values(padded_binary, 1), BINARY)
@@ -325,13 +327,12 @@ is only supported between two DigitValue() instances.')
 
     def two_complement(self):
         """Return the two's complement of the number."""
-        log_method("Two's complement", self, priority_level=1)
+        log_method("Two's complement of", self, priority_level=1)
         if self.polarity:
             _one_complement = self.one_complement()
-            log_method("Use one's complement value in order to calculate two's complement",
+            log_method("Increment one's complement value to find two's complement",
                        _one_complement, priority_level=0)
             # Pad "1" with leading zeroes, so it can be added to the one's complement.
-            log_method("Increment one's complement by 1")
             one = pad_left((1,), len(_one_complement.digits) - 1)
             incremented, _ = _one_complement.add_iterable(_one_complement.digits, one,
                                                           _one_complement.base)
