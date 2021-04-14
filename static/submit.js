@@ -51,13 +51,13 @@ function submit() {
   xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
   xhr.onload = function() {
     if (xhr.status === 200 && xhr.responseText !== items) {
-      console.log(xhr.responseText);
+      // console.log(xhr.responseText);
       const response = JSON.parse(xhr.responseText);
 
       if (response.answer) {
         document.getElementById("final").innerHTML = "Final value: " + response.answer;
         // Add each method item as a <ul> to the working display.
-        console.table(response.method);
+        // console.table(response.method);
         workingDisplay.setState({items: response.method});
       }
       else {
