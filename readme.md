@@ -1,23 +1,18 @@
 # Conversion Calculator
-(Assignment) for Python 3.7 or 3.8
+Made with Flask and Python 3.7 or 3.8
 
 You may be able to try the [web app](https://generic.eu.pythonanywhere.com/) here, if it's running.
 
 ## Specification
 Design and program a calculator which allows the user to, 
 
-1. 1. Convert from a binary number to a denary number 
-   2. Convert from a denary number to a binary number 
-   3. Convert from a negative denary number to a negative binary number 
-   4. Convert from a negative binary number to a negative denary number 
-
-2. Convert between Denary, Binary and Hexadecimal. 
-3. The user can either choose to represent the negative binary number as either sign magnitude or two's complement. 
-4. Allow the answer to be displayed in one's complement. 
-5. Convert between, Denary, Binary, Hexadecimal, Octal and BCD. 
-6. Modify so values can be added and subtracted in your program. Show Denary, Binary and Hexadecimal addition and subtraction. 
-7. Interact with the program using a graphical user interface - in particular, this project will utilise Flask. 
-8. Print out the maths for each conversion in a suitable format for the user to understand the calculation. 
+1. Convert between Denary, Binary and Hexadecimal.
+2. The user can either choose to represent the negative binary number as either sign and magnitude or two's complement.
+3. Allow the answer to be displayed in one's complement.
+4. Convert between, Denary, Binary, Hexadecimal, Octal and BCD.
+5. Show Denary, Binary and Hexadecimal addition and subtraction.
+6. Interact with the program using a graphical user interface - in particular, this project will utilise Flask.
+7. Print out the maths for each conversion in a suitable format for the user to understand the calculation.
 
 ## Data
 
@@ -40,5 +35,4 @@ Note: the intention of this project is to demonstrate computational methods for 
 rather than being a general-purpose and efficient library. However, digit.py is technically usable
 as its own module for dealing with base conversions (optionally with working.py to enable working).
 
-Provided "as is": no guarantee that this won't crash or break. The software and associated documentation files
-may be used, copied, modified and distributed without restriction, as long as this isn't your assignment work :)
+Provided "as is": no guarantee that this won't crash or break. The software, assets and associated files may be used, copied, modified and distributed without restriction.

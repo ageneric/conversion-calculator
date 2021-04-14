@@ -4,7 +4,7 @@
 
   --bar: #4b4c50;
   --theme-primary: #6b7984;
-  --theme-secondary: #cdc5d9;
+  --theme-secondary: #d6cfcb;
   --background: #e0dfd8;
 
   --text-main: #28292d;
@@ -43,6 +43,16 @@ h2, h3 {
   color: var(--theme-primary);
 }
 
+h2:after {
+  /* display under header. Content field is required. */
+  content: ' ';
+  display: block;
+  border: 2px solid var(--theme-secondary);
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
 a {
   color: var(--text-main);
   transition: background-color linear 0.3s;
@@ -61,6 +71,11 @@ button, input, select, textarea {
 }
 
 input, select {
+  /* set input and select to the same box model */
+  box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  /* ...so that they are the same width when set here */
   width: 80%;
 }
 
@@ -69,26 +84,54 @@ input, button {
 }
 
 ol, ul {
-  border-left: 5px solid #cdc5d9;
+  margin-right: 0.6em;
+  border-left: 5px solid var(--theme-secondary);
   background-color: #f1f1f1;
   border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+li:first-child {
+  padding-top: 0.5rem;
+}
+li:last-child {
+  padding-bottom: 0.5rem;
 }
 
-#clear {
-  float: left;
-  margin-left: 0.6em;
-  margin-right: 1em;
+#submit {
+  display: inline;
+  margin-right: 0.6em;
 }
 
-.form {
+#add-step-picker {
   display: -ms-flexbox;
   display: -webkit-flex;
   display: -moz-box;
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.step-type {
+  display: inherit;
+  flex-direction: column;
+  flex: 1;
+  min-width: 17.2em;
   padding: 0.6em 0.6em;
+  margin-right: 0.6em;
   margin-bottom: 0.6em;
-  background-color: #c8c7c0;
+  background-color: var(--theme-secondary);
   border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+}
+
+.form-item {
+  margin-bottom: 0.6em;
+}
+.form-item:last-child {
+  margin-top: auto;
+  margin-bottom: 0;
 }
 
 .highlight {
@@ -116,15 +159,6 @@ ol, ul {
   padding-left: 1em;
 }
 
-.flex-item {
-  flex: 1;
-  align-self: flex-end;
-}
-
-.flex-item-double {
-  flex: 2;
-}
-
 li.step {
   padding-left: 2em;
 }
@@ -139,13 +173,12 @@ li.working-header {
 }
 
 li.working-legend {
-  list-style: circle;
-  padding-left: 2em;
-  padding-top: 0.2em;
+  padding-left: 2rem;
 }
 
 li.working {
-  font-size: 0.85rem;
+  list-style: circle;
+  font-size: 0.85em;
   padding-left: 2rem;
 }
 

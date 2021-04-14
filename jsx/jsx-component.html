@@ -3,65 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <title>Conversions Calculator</title>
-  <link href="static/styles.css" rel="stylesheet"/>
+  <link href="../static/styles.css" rel="stylesheet"/>
 </head>
 <body>
 <div id="top" class="bar">
-  <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">v1</div>
+  <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">jsx-indev</div>
 </div>
 <div class="text">
   <p>A single value will be stored and modified on the Python web server, while the list of steps configured below is processed.
     To start, add a <span class="highlight">number</span> to the list of steps to run.</p>
   <p>Steps are executed in the order from top to bottom. Please note that addition requires a following number, which is added to the value in memory.</p>
   <h2>Enter data</h2>
-  <div id="step-picker">
+  <div id="-step-picker">
     <div>
-      <div class="form">
-        <div class="flex-item">
-          <label for="numeric-base">Base</label>
-          <select id="numeric-base"
-                  onChange={this.changeBase} value={this.state.base}>
-            <option value="2">Binary</option>
-            <option value="8">Octal</option>
-            <option value="10">Decimal</option>
-            <option value="16">Hexadecimal</option>
-            <option value="BCD">BCD</option>
-          </select>
-        </div>
-        <div class="flex-item">
-          <label id="numeric-digits">Digits <span class="note">(- for negative)</span></label>
-          <input type="text" name="numeric-digits"
-                 onChange={this.changeNumeric} value={this.state.numeric} />
-        </div>
-        <div class="flex-item">
-          <button onClick={this.submitNumber}>Add Number</button>
-        </div>
+      <div id="add-step-picker">
+        <div id="add-number" class="step-type">
+          <div class="form-item">
+            <label for="numeric-base">Base</label>
+            <select id="numeric-base"
+                    onChange={this.changeBase} value={this.state.base}>
+              <option value="2">Binary</option>
+              <option value="8">Octal</option>
+              <option value="10">Decimal</option>
+              <option value="16">Hexadecimal</option>
+              <option value="BCD">BCD</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <label id="numeric-digits">Digits <span class="note">(- for negative)</span></label>
+            <input type="text" name="numeric-digits"
+                   onChange={this.changeNumeric} value={this.state.numeric} />
+          </div>
+          <div class="form-item">
+            <button name="submit-number" onClick={this.submitNumber}>Create New Number</button>
+            <label for="submit-number" id="submit-number"></label>
+          </div>
       </div>
-      <div class="form">
-        <div class="flex-item-double">
-          <label for="calculation">Calculations</label>
-          <select id="calculation"
-                  onChange={this.changeCalcType} value={this.state.calcType}>
-            <option value="2">To Binary</option>
-            <option value="8">To Octal</option>
-            <option value="10">To Decimal</option>
-            <option value="16">To Hexadecimal</option>
-            <option value="BCD">To BCD</option>
-            <option value="add">Add Next</option>
-            <option value="numerals">Display Numerals</option>
-            <option value="value">Display Base 10 Value</option>
-            <option value="pad_to_bytes">Display as Bytes</option>
-            <option value="sign_and_magnitude">Display Sign and Mag.</option>
-            <option value="one_complement">Display One's Complement</option>
-            <option value="two_complement">Display Two's Complement</option>
-          </select>
-        </div>
-        <div class="flex-item">
-          <button onClick={this.submitCalc}>Add Calculation</button>
+        <div id="add-calc" class="step-type">
+          <div class="form-item">
+            <label for="calculation">Calculations</label>
+            <select id="calculation"
+                    onChange={this.changeCalcType} value={this.state.calcType}>
+              <option value="2">Convert to Binary</option>
+              <option value="8">Convert to Octal</option>
+              <option value="10">Convert to Decimal</option>
+              <option value="16">Convert to Hexadecimal</option>
+              <option value="BCD">Convert to BCD</option>
+              <option value="add">Add next number</option>
+              <option value="numerals">Display as numerals</option>
+              <option value="value">Display base 10 value</option>
+              <option value="pad_to_bytes">Display padded bytes</option>
+              <option value="sign_and_magnitude">Display Sign and Mag.</option>
+              <option value="one_complement">Display 1's Complement</option>
+              <option value="two_complement">Display 2's Complement</option>
+            </select>
+          </div>
+          <div class="form-item">
+            <button name="submit-calc" onClick={this.submitCalc}>Create New Calculation</button>
+            <label for="submit-calc" id="submit-calc"></label>
+          </div>
         </div>
       </div>
       <button id="clear" onClick={this.clear}>Clear All Steps</button>
-      <p>Modify the list of steps below.</p>
       <StepList items={this.state.items} />
     </div>
   </div>
@@ -69,15 +72,14 @@
   <h2>Output</h2>
   <div id="output">
     <button id="submit" onclick="submit()">Send!</button>
-    <p id="final">The result & working will be placed here once calculated.</p>
+    <p id="final">Once you're ready, click Send! The result & working will be placed here calculated.</p>
     <div id="working"></div>
   </div>
 </div>
-<p class="small">developed by kevin gao (git: @ageneric), updated 2020-10-21.</p>
+<p id="footer-text">developed by kevin gao [development version without react].</p>
 </body>
 
 <!-- js -->
 <script crossorigin src="https://unpkg.com/react@16/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@16/umd/react-dom.production.min.js"></script>
-<script src="static/main.js"></script>
+<script src="../static/main.js"></script>
 </html>
