@@ -2,18 +2,21 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Conversions Calculator</title>
   <link href="static/styles.css" rel="stylesheet"/>
 </head>
 <body>
   <div id="top" class="bar">
-    <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">v1.1</div>
+    <div class="bar-item">Conversions Calculator</div><div class="bar-item highlight">v1.2</div>
   </div>
   <div class="text">
-    <p>A single value will be stored and modified by the list of steps, configured below.
-       To start, add a <span class="highlight">number</span> to the list of steps to be processed.</p>
-    <p>Steps are executed in the order from top to bottom. Please note that addition requires an extra number,
-       after the addition instruction, which is added to the value in memory.</p>
+    <p>To start, add a <span class="highlight">number</span> to the list of steps below.
+       Steps are processed in the order from top to bottom.</p>
+    <p>The stored value can be modified by <span class="highlight">converting</span> it to a different base,
+       or using <span class="highlight">addition</span>. Any addition instruction must be followed by a number,
+       which is added to the last stored value.</p>
+    <p>You can <span class="highlight">display</span> the stored value at any point in the list of steps.</p>
     <h2>Enter data</h2>
     <div id="step-picker"></div>
     
@@ -24,8 +27,7 @@
       <div id="working"></div>
     </div>
   </div>
-  <p id="footer-text">developed by kevin gao (<a href="https://github.com/ageneric/conversion-calculator/">git</a>),
-    last updated 2020-12-18.</p>
+  <p id="footer-text">developed by kevin g. (<a href="https://github.com/ageneric/conversion-calculator/">git</a>)</p>
 </body>
 
 <!-- js -->

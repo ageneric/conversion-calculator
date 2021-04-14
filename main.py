@@ -37,7 +37,7 @@ def parse_request(json_items):
         for step in json_items:
             if step['type'] == 'value':
                 new_base, new_wrap_point = valid_base(step['base'])
-                new_digits, new_polarity = parse_numeric(step['numeric'])
+                new_digits, new_polarity = parse_numeric(step['numeric'].lower())
 
                 new = DigitValue(new_digits, new_polarity, new_base, new_wrap_point)
                 raw_method.append(new)
@@ -166,7 +166,7 @@ def evaluate_steps(steps):
         elif _step_type == FUNCTION:
             f_name = current_step[1]
             if f_name == functions[0]:
-                working.log_method('Add the next value supplied', priority_level=2)
+                working.log_method('Add the next number', priority_level=2)
                 operation = f_name
             else:
                 # Get the requested method's value.

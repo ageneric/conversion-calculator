@@ -4,8 +4,8 @@
 
   --bar: #4b4c50;
   --theme-primary: #6b7984;
-  --theme-secondary: #d6cfcb;
-  --background: #e0dfd8;
+  --theme-secondary: #d6d2d0;
+  --background: #e2e1db;
 
   --text-main: #28292d;
   --text-light: #ffffff;
@@ -18,7 +18,7 @@ html, body {
 
 body {
   font-family: Segoe UI, sans-serif;
-  color: #282a2d;
+  color: var(--text-main);
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -170,6 +170,8 @@ h3.step-header {
 
 li.working-header {
   list-style: none;
+  text-decoration: underline;
+  margin-top: 0.2rem;
 }
 
 li.working-legend {

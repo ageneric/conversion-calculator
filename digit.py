@@ -301,7 +301,7 @@ is only supported between two DigitValue() instances.')
             digits.insert(0, new_digit)  # Remainders are inserted in reverse order.
 
             if USE_WORKING:
-                log_method('Value divided by the base', f'result {value}', f'remainder {new_digit}')
+                log_method('Base divides value', f'result {value}', f'remainder {new_digit}')
             run_at_least_once = True
 
         log_method('Base conversion result', digits)

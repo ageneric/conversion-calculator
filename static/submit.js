@@ -32,9 +32,16 @@ function submit() {
   const items = stepPicker.state.items;
   console.table(items);
 
+  var lastItem = items[items.length - 1]
+
+  // Basic validation cases
   if (items.length == 0) {
     document.getElementById("final").innerHTML = "Please add steps using the inputs above. The result & working will be placed below.";
     workingDisplay.setState({items: []}); // Clears the working display.
+    return;
+  }
+  else if (lastItem.type === "calculation" && lastItem.calc === "add") {
+    document.getElementById("final").innerHTML = "An addition instruction must be followed by a number.";
     return;
   }
 
@@ -44,13 +51,13 @@ function submit() {
   xhr.setRequestHeader("Content-Type", "application/json;charset=utf-8");
   xhr.onload = function() {
     if (xhr.status === 200 && xhr.responseText !== items) {
-      console.log(xhr.responseText);
-      var response = JSON.parse(xhr.responseText);
+      // console.log(xhr.responseText);
+      const response = JSON.parse(xhr.responseText);
 
       if (response.answer) {
         document.getElementById("final").innerHTML = "Final value: " + response.answer;
         // Add each method item as a <ul> to the working display.
-        console.table(response.method);
+        // console.table(response.method);
         workingDisplay.setState({items: response.method});
       }
       else {

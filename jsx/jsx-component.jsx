@@ -21,7 +21,7 @@
                    onChange={this.changeNumeric} value={this.state.numeric} />
           </div>
           <div class="form-item">
-            <button name="submit-number" onClick={this.submitNumber}>Add Number</button>
+            <button name="submit-number" onClick={this.submitNumber}>Create New Number</button>
             <label for="submit-number" id="submit-number"></label>
           </div>
       </div>
@@ -30,22 +30,22 @@
             <label for="calculation">Calculations</label>
             <select id="calculation"
                     onChange={this.changeCalcType} value={this.state.calcType}>
-              <option value="2">To Binary</option>
-              <option value="8">To Octal</option>
-              <option value="10">To Decimal</option>
-              <option value="16">To Hexadecimal</option>
-              <option value="BCD">To BCD</option>
-              <option value="add">Add Next</option>
-              <option value="numerals">Display Numerals</option>
-              <option value="value">Display Base 10 Value</option>
-              <option value="pad_to_bytes">Display as Bytes</option>
+              <option value="2">Convert to Binary</option>
+              <option value="8">Convert to Octal</option>
+              <option value="10">Convert to Decimal</option>
+              <option value="16">Convert to Hexadecimal</option>
+              <option value="BCD">Convert to BCD</option>
+              <option value="add">Add next number</option>
+              <option value="numerals">Display as numerals</option>
+              <option value="value">Display base 10 value</option>
+              <option value="pad_to_bytes">Display padded bytes</option>
               <option value="sign_and_magnitude">Display Sign and Mag.</option>
-              <option value="one_complement">Display One's Complement</option>
-              <option value="two_complement">Display Two's Complement</option>
+              <option value="one_complement">Display 1's Complement</option>
+              <option value="two_complement">Display 2's Complement</option>
             </select>
           </div>
           <div class="form-item">
-            <button name="submit-calc" onClick={this.submitCalc}>Add Calculation</button>
+            <button name="submit-calc" onClick={this.submitCalc}>Create New Calculation</button>
             <label for="submit-calc" id="submit-calc"></label>
           </div>
         </div>
