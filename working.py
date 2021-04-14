@@ -14,6 +14,7 @@ current_step = []
 id_counter = count(0)
 
 def clear():
+    """Clear the log file (if logging is enabled)."""
     if LOG_WORKING:
         try:
             with open(log_directory, 'w'):
@@ -23,6 +24,8 @@ def clear():
 (writes to {log_directory}). Alternatively, disable logging: LOG_WORKING = False.')
 
 def log_method(message, *args, priority_level=-1):
+    """Log a working step, which can be emphasised
+    by setting a priority level (0 - 2), 2 is highest."""
     if not USE_WORKING:
         return
 
